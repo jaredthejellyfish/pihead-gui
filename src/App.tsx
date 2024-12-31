@@ -12,24 +12,29 @@ import NewProfilePage from "@/routes/profiles/new";
 import SoftwareUpdatePage from "@/routes/settings/update";
 import AboutPage from "@/routes/settings/about";
 import EditProfilePage from "./routes/settings/profile/edit";
+import { ThemeProvider } from "./contexts/theme-provider";
 
 export default function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/profiles" element={<Profiles />} />
-        <Route path="/profiles/new" element={<NewProfilePage />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/settings/wifi" element={<WiFiSettings />} />
-        <Route path="/settings/bluetooth" element={<BluetoothSettings />} />
-        <Route path="/settings/display" element={<DisplaySettings />} />
-        <Route path="/settings/sound" element={<SoundSettings />} />
-        <Route path="/settings/music-services" element={<MusicServicesSettings />} />
-        <Route path="/settings/update" element={<SoftwareUpdatePage />} />
-        <Route path="/settings/about" element={<AboutPage />} />
-        <Route path="/profiles/edit" element={<EditProfilePage />} />
-      </Routes>
-    </Router>
+    <ThemeProvider defaultTheme="system" storageKey="pihead-theme">
+      <div className="min-h-screen bg-background text-foreground">
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/profiles" element={<Profiles />} />
+            <Route path="/profiles/new" element={<NewProfilePage />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings/wifi" element={<WiFiSettings />} />
+            <Route path="/settings/bluetooth" element={<BluetoothSettings />} />
+            <Route path="/settings/display" element={<DisplaySettings />} />
+            <Route path="/settings/sound" element={<SoundSettings />} />
+            <Route path="/settings/music-services" element={<MusicServicesSettings />} />
+            <Route path="/settings/update" element={<SoftwareUpdatePage />} />
+            <Route path="/settings/about" element={<AboutPage />} />
+            <Route path="/profiles/edit" element={<EditProfilePage />} />
+          </Routes>
+        </Router>
+      </div>
+    </ThemeProvider>
   );
 }

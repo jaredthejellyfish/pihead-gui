@@ -18,17 +18,15 @@ import { Slider } from "@/components/ui/slider";
 import QuickSettingsSection from "@/components/Settings/QuickSettingsSection";
 import SettingSection from "@/components/Settings/SettingSection";
 import SettingRow from "@/components/Settings/SettingRow";
-import Header from "@/components/Header";
-import { useEffect } from "react";
+import Header from "@/components/Header";2
+import { useTheme } from "@/contexts/theme-provider";
 
 export default function SettingsScreen() {
-  useEffect(() => {
-    const localStorage = window.localStorage.setItem("theme", "dark");
-    console.log(localStorage);
-  }, []);
+  const { theme, setTheme } = useTheme();
+
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:bg-black" />
+    <div className="h-full bg-black text-white aspect-maybevideo">
+      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:hidden h-full" />
       <div className="relative h-full p-8 mx-auto">
         {/* Header */}
         <Header
@@ -97,7 +95,10 @@ export default function SettingsScreen() {
               </div>
             </SettingRow>
             <SettingRow icon={Moon} title="Dark Mode">
-              <Switch defaultChecked />
+              <Switch
+                defaultChecked={theme === "dark"}
+                onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+              />
             </SettingRow>
           </SettingSection>
 
