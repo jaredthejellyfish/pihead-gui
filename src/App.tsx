@@ -11,6 +11,7 @@ import MusicServicesSettings from "@/routes/settings/music-services";
 import NewProfilePage from "@/routes/profiles/new";
 import SoftwareUpdatePage from "@/routes/settings/update";
 import AboutPage from "@/routes/settings/about";
+import EditProfilePage from "./routes/settings/profile/edit";
 
 export default function App() {
   return (
@@ -27,6 +28,7 @@ export default function App() {
         <Route path="/settings/music-services" element={<MusicServicesSettings />} />
         <Route path="/settings/update" element={<SoftwareUpdatePage />} />
         <Route path="/settings/about" element={<AboutPage />} />
+        <Route path="/profiles/edit" element={<EditProfilePage />} />
       </Routes>
     </Router>
   );

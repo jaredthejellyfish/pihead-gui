@@ -58,7 +58,7 @@ export default function DisplaySettingsPage() {
   const [glareReduction, setGlareReduction] = useState(true);
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-video">
+    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none" />
 
       <div className="relative h-full p-8">

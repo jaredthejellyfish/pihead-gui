@@ -1,10 +1,23 @@
+/* eslint-disable */
+
 import { app, BrowserWindow, ipcMain } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import contextMenu from "electron-context-menu";
 import "./database";
+import {
+  addProfile,
+  getProfiles,
+  updateProfile,
+  deleteProfile,
+  setActiveProfile,
+  getActiveProfile,
+} from "./database";
+import { Profile } from "../src/types";
+import loudness from "loudness";
 
+// @ts-expect-error - Electron doesn't support ES modules
 const require = createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -17,6 +30,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // │ │ ├── main.js
 // │ │ └── preload.mjs
 // │
+
 process.env.APP_ROOT = path.join(__dirname, "..");
 
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
@@ -66,6 +80,55 @@ function createWindow() {
 ipcMain.handle("ping", () => {
   console.log("Received ping from renderer");
   return "pong";
+});
+
+// IPC Handlers
+ipcMain.handle("get-profiles", () => {
+  return getProfiles();
+});
+
+ipcMain.handle("get-volume", async () => {
+  return await loudness.getVolume(); // Returns current volume as a percentage
+});
+
+ipcMain.handle("set-volume", async (_, volume: number) => {
+  await loudness.setVolume(volume); // Sets volume (0-100)
+});
+
+ipcMain.handle("mute", async () => {
+  await loudness.setMuted(true); // Mutes the system
+});
+
+ipcMain.handle("unmute", async () => {
+  await loudness.setMuted(false); // Unmutes the system
+});
+
+ipcMain.handle("add-profile", (_, profile: Profile) => {
+  return addProfile(profile);
+});
+
+ipcMain.handle("update-profile", (_, profile: Profile) => {
+  return updateProfile(profile);
+});
+
+ipcMain.handle("delete-profile", (_, id: number) => {
+  return deleteProfile(id);
+});
+
+ipcMain.handle("set-active-profile", (_, id: number) => {
+  return setActiveProfile(id);
+});
+
+ipcMain.handle("get-active-profile", () => {
+  return getActiveProfile();
+});
+
+ipcMain.handle("get-muted", async () => {
+  return await loudness.getMuted();
+});
+
+ipcMain.handle("set-muted", async (_, muted: boolean) => {
+  await loudness.setMuted(muted);
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

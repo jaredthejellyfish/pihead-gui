@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Play,
   Pause,
@@ -16,11 +16,13 @@ import {
   Sunrise,
   Settings,
   type LucideIcon,
-} from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import VolumeControl from "@/components/VolumeControl";
+import { Profile } from "@/types";
 
 function QuickAccessCard({
   icon: Icon,
@@ -36,7 +38,7 @@ function QuickAccessCard({
   gradient: string;
 }) {
   return (
-    <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden hover:bg-white/10 transition-all duration-300 aspect-video max-h-[120px] w-full">
+    <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden hover:bg-white/10 transition-all duration-300 aspect-maybevideo max-h-[120px] w-full">
       <CardContent className="p-6">
         <div className="flex items-center space-x-4">
           <div
@@ -115,17 +117,21 @@ function VehicleStatusWidget() {
 export default function HomeScreen() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [currentSong, setCurrentSong] = useState({
-    title: 'Starlight',
-    artist: 'Muse',
-    album: 'Black Holes and Revelations',
+    title: "Starlight",
+    artist: "Muse",
+    album: "Black Holes and Revelations",
   });
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [activeProfile, setActiveProfile] = useState({
-    name: 'David',
-    theme: 'blue',
-    lastTrip: '15.5 miles',
-  });
+  const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
+
+  const [volumeControlOpen, setVolumeControlOpen] = useState(false);
+
+  useEffect(() => {
+    window.electron.getActiveProfile().then((profile) => {
+      setActiveProfile(profile);
+    });
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -147,11 +153,11 @@ export default function HomeScreen() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (
-    <div className="h-full bg-black text-white overflow-auto aspect-video">
+    <div className="bg-black text-white overflow-auto aspect-maybevideo relative h-screen">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none" />
 
       <div className="relative h-full p-8">
@@ -160,20 +166,23 @@ export default function HomeScreen() {
           <div>
             <h1 className="text-6xl font-light tracking-tight">
               {currentTime.toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
+                hour: "2-digit",
+                minute: "2-digit",
               })}
             </h1>
             <p className="text-gray-400 mt-1">
               {currentTime.toLocaleDateString([], {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
+                weekday: "long",
+                month: "long",
+                day: "numeric",
               })}
             </p>
           </div>
           <div className="flex justify-end items-center space-x-4">
-            <Volume2 className="w-6 h-6 text-blue-400" />
+            <Volume2
+              className="w-6 h-6 text-blue-400"
+              onClick={() => setVolumeControlOpen(true)}
+            />
             <Thermometer className="w-6 h-6 text-blue-400" />
             <span className="text-xl">72°F</span>
             <Link
@@ -183,7 +192,9 @@ export default function HomeScreen() {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
                 <User className="w-5 h-5" />
               </div>
-              <span className="text-sm font-medium">{activeProfile.name}</span>
+              <span className="text-sm font-medium">
+                {activeProfile?.name ?? "David"}
+              </span>
             </Link>
           </div>
         </div>
@@ -284,6 +295,10 @@ export default function HomeScreen() {
           </div>
         </div>
       </div>
+      <VolumeControl
+        isOpen={volumeControlOpen}
+        onClose={() => setVolumeControlOpen(false)}
+      />
     </div>
   );
 }

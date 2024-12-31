@@ -9,6 +9,8 @@ import {
   Music,
   RefreshCw,
   Info,
+  Trash,
+  Edit,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
@@ -17,13 +19,16 @@ import QuickSettingsSection from "@/components/Settings/QuickSettingsSection";
 import SettingSection from "@/components/Settings/SettingSection";
 import SettingRow from "@/components/Settings/SettingRow";
 import Header from "@/components/Header";
-
+import { useEffect } from "react";
 
 export default function SettingsScreen() {
-
+  useEffect(() => {
+    const localStorage = window.localStorage.setItem("theme", "dark");
+    console.log(localStorage);
+  }, []);
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-video">
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none" />
+    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:bg-black" />
       <div className="relative h-full p-8 mx-auto">
         {/* Header */}
         <Header
@@ -33,7 +38,6 @@ export default function SettingsScreen() {
           showSettings={false}
         />
 
-       
         <div className="space-y-6 mx-auto pb-7">
           {/* Quick Settings */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
@@ -80,6 +84,9 @@ export default function SettingsScreen() {
             >
               <ChevronRight className="w-5 h-5 text-gray-500" />
             </SettingRow>
+            <SettingRow icon={Edit} title="Edit Profile" href="/profiles/edit">
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </SettingRow>
           </SettingSection>
 
           {/* Display Settings */}
@@ -105,6 +112,16 @@ export default function SettingsScreen() {
               <ChevronRight className="w-5 h-5 text-gray-500" />
             </SettingRow>
             <SettingRow icon={Info} title="About" href="/settings/about">
+              <ChevronRight className="w-5 h-5 text-gray-500" />
+            </SettingRow>
+          </SettingSection>
+
+          <SettingSection title="Delete Profile">
+            <SettingRow
+              icon={Trash}
+              title="Delete Profile"
+              href="/settings/profile/delete"
+            >
               <ChevronRight className="w-5 h-5 text-gray-500" />
             </SettingRow>
           </SettingSection>

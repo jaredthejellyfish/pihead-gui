@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -10,12 +10,41 @@ export default function ProfilesScreen() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [activeProfile, setActiveProfile] = useState<number | null>(null);
 
+  // Fetch profiles on component mount
+  useEffect(() => {
+    const fetchProfiles = async () => {
+      try {
+        const fetchedProfiles = await window.electron.getProfiles();
+        setProfiles(fetchedProfiles);
+        // Set active profile if one exists
+        const active = fetchedProfiles.find(p => p.isActive);
+        if (active?.id) {
+          setActiveProfile(active.id);
+        }
+      } catch (error) {
+        console.error("Error fetching profiles:", error);
+      }
+    };
+
+    fetchProfiles();
+  }, []);
+
   const handleProfileClick = async (id: number) => {
-    console.log(id);
+    try {
+      const updatedProfile = await window.electron.setActiveProfile(id);
+      if (updatedProfile) {
+        // Refresh profiles to get updated active states
+        const updatedProfiles = await window.electron.getProfiles();
+        setProfiles(updatedProfiles);
+        setActiveProfile(id);
+      }
+    } catch (error) {
+      console.error("Error activating profile:", error);
+    }
   };
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-video">
+    <div className="bg-black text-white overflow-scroll aspect-maybevideo h-screen">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none" />
 
       <div className="relative h-full p-8">
@@ -35,7 +64,6 @@ export default function ProfilesScreen() {
               name={profile.name}
               theme={profile.theme}
               lastTrip={profile.lastTrip || "No trips yet"}
-              musicPreference={profile.musicPreference || "Not set"}
               onClick={() => profile.id && handleProfileClick(profile.id)}
               isActive={profile.id === activeProfile}
             />

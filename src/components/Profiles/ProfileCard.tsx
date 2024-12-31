@@ -12,14 +12,12 @@ function ProfileCard({
   isActive,
   theme,
   lastTrip,
-  musicPreference,
   onClick,
 }: {
   name: string;
   isActive: boolean;
   theme: ThemeColor;
   lastTrip: string;
-  musicPreference: string;
   onClick: () => void;
 }) {
   const gradientMap = {
@@ -52,14 +50,10 @@ function ProfileCard({
                 </span>
               )}
             </div>
-            <div className="mt-4 grid grid-cols-2 gap-4">
+            <div className="mt-4 grid grid-cols-1 gap-4">
               <div className="flex items-center space-x-2 text-gray-400">
                 <Car className="w-4 h-4" />
                 <span className="text-sm">{lastTrip}</span>
-              </div>
-              <div className="flex items-center space-x-2 text-gray-400">
-                <Music className="w-4 h-4" />
-                <span className="text-sm">{musicPreference}</span>
               </div>
             </div>
           </div>

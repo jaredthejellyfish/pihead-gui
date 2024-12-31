@@ -1,6 +1,8 @@
 /* eslint-disable */
 /* @typescript-eslint-disable */
 
+import { Profile } from "./types";
+
 export interface IElectronAPI {
   ipcRenderer: {
     on(channel: string, func: (...args: any[]) => void): void;
@@ -14,5 +16,21 @@ export interface IElectronAPI {
 declare global {
   interface Window {
     electronAPI: IElectronAPI;
+    electron: {
+      ping: () => Promise<string>;
+      // Profile management
+      getProfiles: () => Promise<Profile[]>;
+      addProfile: (profile: Profile) => Promise<Profile>;
+      updateProfile: (profile: Profile) => Promise<Profile | null>;
+      deleteProfile: (id: number) => Promise<boolean>;
+      setActiveProfile: (id: number) => Promise<Profile | null>;
+      getVolume: () => Promise<number>;
+      setVolume: (volume: number) => Promise<void>;
+      mute: () => Promise<void>;
+      unmute: () => Promise<void>;
+      getMuted: () => Promise<boolean>;
+      setMuted: (muted: boolean) => Promise<void>;
+      getActiveProfile: () => Promise<Profile | null>;
+    };
   }
 }
