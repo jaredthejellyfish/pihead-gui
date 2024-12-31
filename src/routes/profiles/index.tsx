@@ -4,38 +4,15 @@ import { Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import ProfileCard from "@/components/Profiles/ProfileCard";
-
-type ThemeColor = "blue" | "purple" | "green" | "orange";
+import { Profile } from "@/types";
 
 export default function ProfilesScreen() {
-  const [profiles] = useState([
-    {
-      id: 1,
-      name: "David",
-      theme: "blue",
-      isActive: true,
-      lastTrip: "15.5 miles",
-      musicPreference: "Rock",
-    },
-    {
-      id: 2,
-      name: "Sarah",
-      theme: "purple",
-      isActive: false,
-      lastTrip: "8.2 miles",
-      musicPreference: "Pop",
-    },
-    {
-      id: 3,
-      name: "Mike",
-      theme: "green",
-      isActive: false,
-      lastTrip: "12.7 miles",
-      musicPreference: "Jazz",
-    },
-  ]);
+  const [profiles, setProfiles] = useState<Profile[]>([]);
+  const [activeProfile, setActiveProfile] = useState<number | null>(null);
 
-  const [activeProfile, setActiveProfile] = useState(1);
+  const handleProfileClick = async (id: number) => {
+    console.log(id);
+  };
 
   return (
     <div className="h-full bg-black text-white overflow-scroll aspect-video">
@@ -47,7 +24,7 @@ export default function ProfilesScreen() {
           title="Profiles"
           backHref="/"
           settingsHref="/settings"
-          showSettings
+          showSettings={profiles.length > 0}
         />
 
         {/* Profiles Grid */}
@@ -56,10 +33,10 @@ export default function ProfilesScreen() {
             <ProfileCard
               key={profile.id}
               name={profile.name}
-              theme={profile.theme as ThemeColor}
-              lastTrip={profile.lastTrip}
-              musicPreference={profile.musicPreference}
-              onClick={() => setActiveProfile(profile.id)}
+              theme={profile.theme}
+              lastTrip={profile.lastTrip || "No trips yet"}
+              musicPreference={profile.musicPreference || "Not set"}
+              onClick={() => profile.id && handleProfileClick(profile.id)}
               isActive={profile.id === activeProfile}
             />
           ))}
@@ -69,7 +46,7 @@ export default function ProfilesScreen() {
             <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden cursor-pointer hover:bg-white/10 transition-all duration-300 flex items-center justify-center h-[110px]">
               <CardContent className="flex items-center justify-center flex-col gap-2 p-0">
                 <Plus className="w-8 h-8 text-gray-400" />
-              <span className="text-gray-400">Add New Profile</span>
+                <span className="text-gray-400">Add New Profile</span>
               </CardContent>
             </Card>
           </Link>

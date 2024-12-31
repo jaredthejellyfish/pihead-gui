@@ -1,4 +1,4 @@
-import electron, { BrowserWindow, app, shell } from "electron";
+import electron, { BrowserWindow, app, shell, ipcMain } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -11836,6 +11836,8 @@ function contextMenu(options = {}) {
   });
   return dispose;
 }
+const appDataPath = app.getPath("userData");
+console.log("appDataPath", appDataPath);
 createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname, "..");
@@ -11855,7 +11857,11 @@ function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
-      preload: path.join(__dirname, "preload.mjs")
+      preload: path.join(__dirname, "preload.mjs"),
+      nodeIntegration: false,
+      // Security best practice
+      contextIsolation: true
+      // Security best practice
     }
   });
   win.webContents.on("did-finish-load", () => {
@@ -11867,6 +11873,10 @@ function createWindow() {
     win.loadFile(path.join(RENDERER_DIST, "index.html"));
   }
 }
+ipcMain.handle("ping", () => {
+  console.log("Received ping from renderer");
+  return "pong";
+});
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();

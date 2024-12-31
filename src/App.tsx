@@ -9,6 +9,8 @@ import DisplaySettings from "@/routes/settings/display";
 import SoundSettings from "@/routes/settings/sound";
 import MusicServicesSettings from "@/routes/settings/music-services";
 import NewProfilePage from "@/routes/profiles/new";
+import SoftwareUpdatePage from "@/routes/settings/update";
+import AboutPage from "@/routes/settings/about";
 
 export default function App() {
   return (
@@ -23,6 +25,8 @@ export default function App() {
         <Route path="/settings/display" element={<DisplaySettings />} />
         <Route path="/settings/sound" element={<SoundSettings />} />
         <Route path="/settings/music-services" element={<MusicServicesSettings />} />
+        <Route path="/settings/update" element={<SoftwareUpdatePage />} />
+        <Route path="/settings/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );
