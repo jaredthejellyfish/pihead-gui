@@ -45,7 +45,7 @@ export default function ProfilesScreen() {
 
   return (
     <div className="bg-black text-white overflow-scroll aspect-maybevideo h-screen">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:hidden" />
+      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
 
       <div className="relative h-full p-8">
         {/* Header */}
