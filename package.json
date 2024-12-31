@@ -1,11 +1,12 @@
 {
   "name": "pihead-gui",
-  "private": true,
   "version": "0.0.0",
+  "private": true,
   "type": "module",
+  "main": "dist-electron/main.js",
   "scripts": {
-    "dev": "vite",
     "build": "tsc && vite build && electron-builder",
+    "dev": "vite",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -28,9 +29,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^7.1.1",
     "sort-by": "^1.2.0",
-    "sql.js": "^1.12.0",
     "sqlite-electron": "^3.1.1",
-    "sqlite3": "^5.1.7",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vite-tsconfig-paths": "^5.1.4"
@@ -54,6 +53,5 @@
     "vite": "^5.1.6",
     "vite-plugin-electron": "^0.28.6",
     "vite-plugin-electron-renderer": "^0.14.5"
-  },
-  "main": "dist-electron/main.js"
+  }
 }
