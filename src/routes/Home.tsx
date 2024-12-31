@@ -22,30 +22,38 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import VolumeControl from "@/components/VolumeControl";
-import { Profile } from "@/types";
+import type { Profile } from "@/types";
+import Carplay from "@/assets/carplay.svg";
 
 function QuickAccessCard({
   icon: Icon,
   title,
   value,
   subtext,
+  image,
   gradient,
 }: {
-  icon: LucideIcon;
+  icon?: LucideIcon;
   title: string;
   value: string;
   subtext: string;
+  image?: string;
   gradient: string;
 }) {
   return (
     <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden hover:bg-white/10 transition-all duration-300 aspect-maybevideo max-h-[120px] w-full">
       <CardContent className="p-6">
         <div className="flex items-center space-x-4">
-          <div
-            className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center`}
-          >
-            <Icon className="w-6 h-6 text-white" />
-          </div>
+          {image && (
+            <img src={image} alt={title} className="w-12 h-12 rounded-xl" />
+          )}
+          {!image && Icon && (
+            <div
+              className={`w-12 h-12 rounded-xl bg-gradient-to-br ${gradient} flex items-center justify-center`}
+            >
+              <Icon className="w-6 h-6 text-white" />
+            </div>
+          )}
           <div>
             <h3 className="text-gray-400 font-medium">{title}</h3>
             <p className="text-2xl font-semibold text-white">{value}</p>
@@ -193,7 +201,7 @@ export default function HomeScreen() {
                 <User className="w-5 h-5" />
               </div>
               <span className="text-sm font-medium">
-                {activeProfile?.name ?? "David"}
+                {activeProfile?.name ?? "Guest"}
               </span>
             </Link>
           </div>
@@ -272,10 +280,10 @@ export default function HomeScreen() {
             {/* Navigation and Fuel Cards */}
             <div className="grid grid-cols-2 gap-4">
               <QuickAccessCard
-                icon={MapPin}
-                title="Navigation"
-                value="Home"
-                subtext="15 min"
+                image={Carplay}
+                title="Carplay"
+                value="Not Connected"
+                subtext="Connect to Carplay"
                 gradient="from-green-500 to-emerald-700"
               />
               <QuickAccessCard

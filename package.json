@@ -27,6 +27,7 @@
     "loudness": "^0.4.2",
     "lucide-react": "^0.469.0",
     "match-sorter": "^8.0.0",
+    "motion": "^11.15.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",

@@ -5,18 +5,28 @@ import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
 import { User, Users, Plus, Check, ChevronsRight, Music } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function NewProfilePage() {
   const [name, setName] = useState("");
-  const [profileType, setProfileType] = useState<"driver" | "passenger" | null>(null);
-  const [theme, setTheme] = useState<"blue" | "purple" | "green" | "orange">("blue");
+  const [profileType, setProfileType] = useState<"driver" | "passenger" | null>(
+    null
+  );
+  const [theme, setTheme] = useState<"blue" | "purple" | "green" | "orange">(
+    "blue"
+  );
   const [musicPreference, setMusicPreference] = useState("");
   const navigate = useNavigate();
 
   const handleCreateProfile = async () => {
     try {
-      const newProfile = await window.electronA.addProfile({
+      const newProfile = await window.electron.addProfile({
         name,
         theme,
         isActive: false,
@@ -50,7 +60,7 @@ export default function NewProfilePage() {
           {/* Profile Name */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <label className="block text-sm text-gray-400 mb-2">
+              <label className="block text-sm text-gray-400 mb-2" htmlFor="name">
                 Profile Name
               </label>
               <Input
@@ -119,7 +129,12 @@ export default function NewProfilePage() {
               <label className="block text-sm text-gray-400 mb-2">
                 Theme Color
               </label>
-              <Select value={theme} onValueChange={(value: "blue" | "purple" | "green" | "orange") => setTheme(value)}>
+              <Select
+                value={theme}
+                onValueChange={(
+                  value: "blue" | "purple" | "green" | "orange"
+                ) => setTheme(value)}
+              >
                 <SelectTrigger className="bg-white/5 border-0 text-white">
                   <SelectValue placeholder="Select a theme" />
                 </SelectTrigger>
