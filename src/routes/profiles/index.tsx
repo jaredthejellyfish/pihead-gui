@@ -4,7 +4,7 @@ import { Plus } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import ProfileCard from "@/components/Profiles/ProfileCard";
-import { Profile } from "@/types";
+import type { Profile } from "@/types";
 
 export default function ProfilesScreen() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
@@ -17,7 +17,7 @@ export default function ProfilesScreen() {
         const fetchedProfiles = await window.electron.getProfiles();
         setProfiles(fetchedProfiles);
         // Set active profile if one exists
-        const active = fetchedProfiles.find(p => p.isActive);
+        const active = fetchedProfiles.find((p) => p.isActive);
         if (active?.id) {
           setActiveProfile(active.id);
         }
@@ -44,9 +44,7 @@ export default function ProfilesScreen() {
   };
 
   return (
-    <div className="bg-black text-white overflow-scroll aspect-maybevideo h-screen">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
-
+    <div className="text-white overflow-scroll  h-screen">
       <div className="relative h-full p-8">
         {/* Header */}
         <Header

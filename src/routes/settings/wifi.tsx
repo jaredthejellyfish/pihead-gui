@@ -119,9 +119,7 @@ export default function WiFiSettingsPage() {
   };
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
-
+    <div className="h-full text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="WiFi"
@@ -176,21 +174,22 @@ export default function WiFiSettingsPage() {
                         isAPMode ? "bg-purple-500/20" : "bg-gray-500/20"
                       } flex items-center justify-center`}
                     >
-                      <Share2 className={`w-6 h-6 ${
-                        isAPMode ? "text-purple-400" : "text-gray-400"
-                      }`} />
+                      <Share2
+                        className={`w-6 h-6 ${
+                          isAPMode ? "text-purple-400" : "text-gray-400"
+                        }`}
+                      />
                     </div>
                     <div>
-                      <h3 className="text-lg font-medium text-white">Access Point</h3>
+                      <h3 className="text-lg font-medium text-white">
+                        Access Point
+                      </h3>
                       <p className="text-sm text-gray-400">
                         {isAPMode ? "Broadcasting as 'Vehicle-AP'" : "Disabled"}
                       </p>
                     </div>
                   </div>
-                  <Switch
-                    checked={isAPMode}
-                    onCheckedChange={toggleAPMode}
-                  />
+                  <Switch checked={isAPMode} onCheckedChange={toggleAPMode} />
                 </div>
               </CardContent>
             </Card>
@@ -246,7 +245,9 @@ export default function WiFiSettingsPage() {
             <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
               <CardContent className="p-6">
                 <div className="space-y-4">
-                  <h3 className="text-lg font-medium text-white">Access Point Settings</h3>
+                  <h3 className="text-lg font-medium text-white">
+                    Access Point Settings
+                  </h3>
                   <div className="space-y-2">
                     <p className="text-sm text-gray-400">Network Name (SSID)</p>
                     <p className="text-white">Vehicle-AP</p>

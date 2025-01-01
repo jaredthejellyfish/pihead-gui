@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "dark" | "light" | "system";
+type Theme = "blue" | "purple" | "green" | "orange" | "dark";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -10,11 +10,13 @@ type ThemeProviderProps = {
 
 type ThemeProviderState = {
   theme: Theme;
+  lastTheme: Theme;
   setTheme: (theme: Theme) => void;
 };
 
 const initialState: ThemeProviderState = {
-  theme: "light",
+  theme: "purple",
+  lastTheme: "purple",
   setTheme: () => null,
 };
 
@@ -22,52 +24,34 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
+  defaultTheme = "purple",
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
+  );
+  const [lastTheme, setLastTheme] = useState<Theme>(
+    () => (localStorage.getItem(`${storageKey}-last`) as Theme) || defaultTheme,
   );
 
+  // Apply theme changes
   useEffect(() => {
-    const root = window.document.body;
-    root.classList.remove("light", "dark");
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-      root.classList.add(systemTheme);
-    } else {
-      root.classList.add(theme);
-    }
+    document.body.className = theme;
   }, [theme]);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      if (theme === "system") {
-        const root = window.document.body;
-        root.classList.remove("light", "dark");
-        root.classList.add(
-          mediaQuery.matches ? "dark" : "light"
-        );
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [theme]);
-
+  // Persist theme selections
   useEffect(() => {
     localStorage.setItem(storageKey, theme);
-  }, [theme, storageKey]);
+    localStorage.setItem(`${storageKey}-last`, lastTheme);
+  }, [theme, lastTheme, storageKey]);
 
   const value = {
     theme,
-    setTheme: (theme: Theme) => {
-      setTheme(theme);
+    lastTheme,
+    setTheme: (newTheme: Theme) => {
+      setLastTheme(theme);
+      setTheme(newTheme);
     },
   };
 
@@ -85,4 +69,4 @@ export const useTheme = () => {
     throw new Error("useTheme must be used within a ThemeProvider");
 
   return context;
-}; 
+};

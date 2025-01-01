@@ -5,4 +5,4 @@ export type Profile = {
   isActive: boolean;
   lastTrip?: string;
   musicPreference?: string;
-}; 
+};

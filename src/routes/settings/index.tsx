@@ -18,15 +18,14 @@ import { Slider } from "@/components/ui/slider";
 import QuickSettingsSection from "@/components/Settings/QuickSettingsSection";
 import SettingSection from "@/components/Settings/SettingSection";
 import SettingRow from "@/components/Settings/SettingRow";
-import Header from "@/components/Header";2
+import Header from "@/components/Header";
 import { useTheme } from "@/contexts/theme-provider";
 
 export default function SettingsScreen() {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, lastTheme } = useTheme();
 
   return (
-    <div className="h-full bg-black text-white aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
+    <div className="h-full text-white ">
       <div className="relative h-full p-8 mx-auto">
         {/* Header */}
         <Header
@@ -82,7 +81,11 @@ export default function SettingsScreen() {
             >
               <ChevronRight className="w-5 h-5 text-gray-500" />
             </SettingRow>
-            <SettingRow icon={Edit} title="Edit Profile" href="/profiles/edit">
+            <SettingRow
+              icon={Edit}
+              title="Edit Profile"
+              href="/settings/profile/edit"
+            >
               <ChevronRight className="w-5 h-5 text-gray-500" />
             </SettingRow>
           </SettingSection>
@@ -97,7 +100,9 @@ export default function SettingsScreen() {
             <SettingRow icon={Moon} title="Dark Mode">
               <Switch
                 defaultChecked={theme === "dark"}
-                onCheckedChange={() => setTheme(theme === "dark" ? "light" : "dark")}
+                onCheckedChange={(value) =>
+                  setTheme(value ? "dark" : lastTheme)
+                }
               />
             </SettingRow>
           </SettingSection>

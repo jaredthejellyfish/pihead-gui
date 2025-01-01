@@ -4,14 +4,14 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 import process$1 from "node:process";
 import fs from "node:fs";
-import fs$1 from "fs";
-import require$$0$1 from "path";
-import require$$0$3 from "os";
-import require$$0$2 from "child_process";
-import require$$0$4 from "assert";
+import require$$0$4 from "os";
+import require$$0$2 from "path";
+import require$$0$3 from "child_process";
+import require$$0$1 from "fs";
+import require$$0$5 from "assert";
 import require$$2 from "events";
-import require$$0$6 from "buffer";
-import require$$0$5 from "stream";
+import require$$0$7 from "buffer";
+import require$$0$6 from "stream";
 import require$$2$1 from "util";
 function isFullwidthCodePoint(codePoint) {
   if (!Number.isInteger(codePoint)) {
@@ -11847,13 +11847,13 @@ function contextMenu(options = {}) {
   return dispose;
 }
 const appDataPath = app.getPath("userData");
-const dbPath = require$$0$1.join(appDataPath, "profiles.json");
-if (!fs$1.existsSync(dbPath)) {
-  fs$1.writeFileSync(dbPath, JSON.stringify({ profiles: [] }));
+const dbPath = path.join(appDataPath, "profiles.json");
+if (!fs.existsSync(dbPath)) {
+  fs.writeFileSync(dbPath, JSON.stringify({ profiles: [] }));
 }
 const getProfiles = () => {
   try {
-    const data = fs$1.readFileSync(dbPath, "utf-8");
+    const data = fs.readFileSync(dbPath, "utf-8");
     return JSON.parse(data).profiles;
   } catch (error2) {
     console.error("Error reading profiles:", error2);
@@ -11871,7 +11871,7 @@ const getActiveProfile = () => {
 };
 const saveProfiles = (profiles) => {
   try {
-    fs$1.writeFileSync(dbPath, JSON.stringify({ profiles }, null, 2));
+    fs.writeFileSync(dbPath, JSON.stringify({ profiles }, null, 2));
   } catch (error2) {
     console.error("Error saving profiles:", error2);
   }
@@ -11922,7 +11922,7 @@ function requireWindows$1() {
   hasRequiredWindows$1 = 1;
   windows$1 = isexe;
   isexe.sync = sync;
-  var fs2 = fs$1;
+  var fs2 = require$$0$1;
   function checkPathExt(path2, options) {
     var pathext = options.pathExt !== void 0 ? options.pathExt : process.env.PATHEXT;
     if (!pathext) {
@@ -11963,7 +11963,7 @@ function requireMode() {
   hasRequiredMode = 1;
   mode = isexe;
   isexe.sync = sync;
-  var fs2 = fs$1;
+  var fs2 = require$$0$1;
   function isexe(path2, options, cb) {
     fs2.stat(path2, function(er, stat) {
       cb(er, er ? false : checkStat(stat, options));
@@ -12051,7 +12051,7 @@ function requireWhich() {
   if (hasRequiredWhich) return which_1;
   hasRequiredWhich = 1;
   const isWindows = process.platform === "win32" || process.env.OSTYPE === "cygwin" || process.env.OSTYPE === "msys";
-  const path2 = require$$0$1;
+  const path2 = require$$0$2;
   const COLON = isWindows ? ";" : ":";
   const isexe = requireIsexe();
   const getNotFoundError = (cmd) => Object.assign(new Error(`not found: ${cmd}`), { code: "ENOENT" });
@@ -12164,7 +12164,7 @@ var hasRequiredResolveCommand;
 function requireResolveCommand() {
   if (hasRequiredResolveCommand) return resolveCommand_1;
   hasRequiredResolveCommand = 1;
-  const path2 = require$$0$1;
+  const path2 = require$$0$2;
   const which = requireWhich();
   const getPathKey = requirePathKey();
   function resolveCommandAttempt(parsed, withoutPathExt) {
@@ -12259,7 +12259,7 @@ var hasRequiredReadShebang;
 function requireReadShebang() {
   if (hasRequiredReadShebang) return readShebang_1;
   hasRequiredReadShebang = 1;
-  const fs2 = fs$1;
+  const fs2 = require$$0$1;
   const shebangCommand2 = requireShebangCommand();
   function readShebang(command2) {
     const size = 150;
@@ -12281,7 +12281,7 @@ var hasRequiredParse;
 function requireParse() {
   if (hasRequiredParse) return parse_1;
   hasRequiredParse = 1;
-  const path2 = require$$0$1;
+  const path2 = require$$0$2;
   const resolveCommand = requireResolveCommand();
   const escape = require_escape();
   const readShebang = requireReadShebang();
@@ -12392,7 +12392,7 @@ var hasRequiredCrossSpawn;
 function requireCrossSpawn() {
   if (hasRequiredCrossSpawn) return crossSpawn.exports;
   hasRequiredCrossSpawn = 1;
-  const cp = require$$0$2;
+  const cp = require$$0$3;
   const parse = requireParse();
   const enoent2 = requireEnoent();
   function spawn(command2, args, options) {
@@ -12439,7 +12439,7 @@ function requireNpmRunPath() {
   if (hasRequiredNpmRunPath) return npmRunPath.exports;
   hasRequiredNpmRunPath = 1;
   (function(module) {
-    const path2 = require$$0$1;
+    const path2 = require$$0$2;
     const pathKey2 = requirePathKey();
     const npmRunPath2 = (options) => {
       options = {
@@ -12844,7 +12844,7 @@ function requireSignals$1() {
   hasRequiredSignals$1 = 1;
   Object.defineProperty(signals$1, "__esModule", { value: true });
   signals$1.getSignals = void 0;
-  var _os = require$$0$3;
+  var _os = require$$0$4;
   var _core = requireCore();
   var _realtime = requireRealtime();
   const getSignals = function() {
@@ -12876,7 +12876,7 @@ function requireMain() {
   hasRequiredMain = 1;
   Object.defineProperty(main, "__esModule", { value: true });
   main.signalsByNumber = main.signalsByName = void 0;
-  var _os = require$$0$3;
+  var _os = require$$0$4;
   var _signals = requireSignals$1();
   var _realtime = requireRealtime();
   const getSignalsByName = function() {
@@ -13099,7 +13099,7 @@ function requireSignalExit() {
       };
     };
   } else {
-    var assert = require$$0$4;
+    var assert = require$$0$5;
     var signals2 = requireSignals();
     var isWin = /^win/i.test(process2.platform);
     var EE = require$$2;
@@ -13236,7 +13236,7 @@ var hasRequiredKill;
 function requireKill() {
   if (hasRequiredKill) return kill;
   hasRequiredKill = 1;
-  const os2 = require$$0$3;
+  const os2 = require$$0$4;
   const onExit = requireSignalExit();
   const DEFAULT_FORCE_KILL_TIMEOUT = 1e3 * 5;
   const spawnedKill = (kill2, signal = "SIGTERM", options = {}) => {
@@ -13572,7 +13572,7 @@ var hasRequiredBufferStream;
 function requireBufferStream() {
   if (hasRequiredBufferStream) return bufferStream;
   hasRequiredBufferStream = 1;
-  const { PassThrough: PassThroughStream } = require$$0$5;
+  const { PassThrough: PassThroughStream } = require$$0$6;
   bufferStream = (options) => {
     options = { ...options };
     const { array } = options;
@@ -13616,7 +13616,7 @@ var hasRequiredGetStream;
 function requireGetStream() {
   if (hasRequiredGetStream) return getStream.exports;
   hasRequiredGetStream = 1;
-  const { constants: BufferConstants } = require$$0$6;
+  const { constants: BufferConstants } = require$$0$7;
   const pump = requirePump();
   const bufferStream2 = requireBufferStream();
   class MaxBufferError extends Error {
@@ -13669,7 +13669,7 @@ var hasRequiredMergeStream;
 function requireMergeStream() {
   if (hasRequiredMergeStream) return mergeStream;
   hasRequiredMergeStream = 1;
-  const { PassThrough } = require$$0$5;
+  const { PassThrough } = require$$0$6;
   mergeStream = function() {
     var sources = [];
     var output = new PassThrough({ objectMode: true });
@@ -13856,8 +13856,8 @@ var hasRequiredExeca;
 function requireExeca() {
   if (hasRequiredExeca) return execa.exports;
   hasRequiredExeca = 1;
-  const path2 = require$$0$1;
-  const childProcess = require$$0$2;
+  const path2 = require$$0$2;
+  const childProcess = require$$0$3;
   const crossSpawn2 = requireCrossSpawn();
   const stripFinalNewline2 = requireStripFinalNewline();
   const npmRunPath2 = requireNpmRunPath();
@@ -14145,8 +14145,8 @@ var hasRequiredWindows;
 function requireWindows() {
   if (hasRequiredWindows) return windows;
   hasRequiredWindows = 1;
-  const childProcess = require$$0$2;
-  const path2 = require$$0$1;
+  const childProcess = require$$0$3;
+  const path2 = require$$0$2;
   const util = require$$2$1;
   const execFile = util.promisify(childProcess.execFile);
   const executablePath = path2.join(__dirname, "adjust_get_current_system_volume_vista_plus.exe");
@@ -14172,7 +14172,7 @@ function requireWindows() {
   };
   return windows;
 }
-const os = require$$0$3;
+const os = require$$0$4;
 let impl = null;
 switch (os.type()) {
   case "Darwin":

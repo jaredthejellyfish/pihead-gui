@@ -15,41 +15,47 @@ import EditProfilePage from "@/routes/settings/profile/edit";
 import DeleteProfilePage from "@/routes/settings/profile/delete";
 import { ThemeProvider } from "@/contexts/theme-provider";
 import AnimationLayout from "@/layouts/AnimationLayout";
+import PageLayout from "@/layouts/PageLayout";
 
 export default function App() {
   return (
-    <ThemeProvider defaultTheme="system" storageKey="pihead-theme">
+    <ThemeProvider defaultTheme="purple" storageKey="pihead-theme">
       <div className="min-h-screen bg-background text-foreground">
-        <Router>
-          <AnimationLayout>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/profiles" element={<Profiles />} />
-              <Route path="/profiles/new" element={<NewProfilePage />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/settings/wifi" element={<WiFiSettings />} />
-              <Route
-                path="/settings/bluetooth"
-                element={<BluetoothSettings />}
-              />
-              <Route path="/settings/display" element={<DisplaySettings />} />
-              <Route path="/settings/sound" element={<SoundSettings />} />
-              <Route
-                path="/settings/music-services"
-                element={<MusicServicesSettings />}
-              />
-              <Route path="/settings/update" element={<SoftwareUpdatePage />} />
-              <Route path="/settings/about" element={<AboutPage />} />
-              <Route
-                path="/settings/profile/edit"
-                element={<EditProfilePage />}
-              />
-              <Route
-                path="/settings/profile/delete"
-                element={<DeleteProfilePage />}
-              />
-            </Routes>
-          </AnimationLayout>
+        <Router basename="/">
+          <PageLayout>
+            <AnimationLayout>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/profiles" element={<Profiles />} />
+                <Route path="/profiles/new" element={<NewProfilePage />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/settings/wifi" element={<WiFiSettings />} />
+                <Route
+                  path="/settings/bluetooth"
+                  element={<BluetoothSettings />}
+                />
+                <Route path="/settings/display" element={<DisplaySettings />} />
+                <Route path="/settings/sound" element={<SoundSettings />} />
+                <Route
+                  path="/settings/music-services"
+                  element={<MusicServicesSettings />}
+                />
+                <Route
+                  path="/settings/update"
+                  element={<SoftwareUpdatePage />}
+                />
+                <Route path="/settings/about" element={<AboutPage />} />
+                <Route
+                  path="/settings/profile/edit"
+                  element={<EditProfilePage />}
+                />
+                <Route
+                  path="/settings/profile/delete"
+                  element={<DeleteProfilePage />}
+                />
+              </Routes>
+            </AnimationLayout>
+          </PageLayout>
         </Router>
       </div>
     </ThemeProvider>

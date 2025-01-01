@@ -1,8 +1,9 @@
-import React from "react";
+import type React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Slider } from "@/components/ui/slider";
-import { Volume2, VolumeX, Volume1, LucideIcon } from "lucide-react";
+import { Volume2, VolumeX, Volume1, type LucideIcon } from "lucide-react";
 import { useMasterVolume } from "@/hooks/useMasterVolume";
+import { cn } from "@/lib/utils";
 
 interface VolumeControlProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ const VolumeSlider = ({
 }) => (
   <div className="flex items-center space-x-4 py-3 px-6">
     <button
+      type="button"
       className="w-12 h-12 p-0 flex items-center justify-center"
       onClick={onMute}
     >
@@ -45,7 +47,6 @@ const VolumeSlider = ({
         max={100}
         step={1}
         className={isMuted ? "opacity-50" : ""}
-      
       />
     </div>
   </div>
@@ -58,8 +59,6 @@ export default function VolumeControl({
 }: VolumeControlProps) {
   const { masterVolume, isMasterMuted, setMasterVolume, toggleMasterMute } =
     useMasterVolume(isOpen);
-
-  if (!isOpen) return null;
 
   const handleClickOutside = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -76,12 +75,21 @@ export default function VolumeControl({
   const MasterIcon = getMasterVolumeIcon();
 
   return (
-    <div
-      className="z-50 flex absolute top-0 right-0 left-0 bottom-0 items-center justify-center backdrop-blur-sm bg-black/10"
+    <dialog
+      className={cn(
+        "z-50 flex absolute top-0 right-0 left-0 bottom-0 items-center justify-center backdrop-blur-sm bg-black/10 w-full h-full transition-opacity duration-300",
+        isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none",
+      )}
       onClick={handleClickOutside}
+      onKeyDown={(e) => e.key === "Escape" && onClose()}
+      aria-modal="true"
+      aria-label="Volume Control"
     >
       <Card
-        className="bg-black/80 border-0 backdrop-blur-xl overflow-hidden max-w-4xl w-full h-32"
+        className={cn(
+          "bg-black/80 border-0 backdrop-blur-xl overflow-hidden max-w-4xl w-full h-32 transition-transform duration-200",
+          isOpen ? "scale-100 pointer-events-auto" : "scale-90 pointer-events-none",
+        )}
         style={{
           top: anchorPosition.top,
           right: anchorPosition.right,
@@ -99,6 +107,6 @@ export default function VolumeControl({
           />
         </CardContent>
       </Card>
-    </div>
+    </dialog>
   );
 }

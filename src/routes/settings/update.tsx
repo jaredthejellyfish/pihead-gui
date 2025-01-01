@@ -14,7 +14,7 @@ import {
   HardDrive,
   Radio,
   AlertCircle,
-  LucideIcon,
+  type LucideIcon,
 } from "lucide-react";
 
 const SystemInfoRow = ({
@@ -128,8 +128,14 @@ const UpdateCard = ({
               <h3 className="text-lg font-medium text-white">{title}</h3>
               <p className="text-sm text-gray-400">Version {version}</p>
             </div>
-            <div className={`px-3 py-1.5 rounded-full ${details.bgColor} flex items-center space-x-2`}>
-              <StatusIcon className={`w-4 h-4 ${details.color} ${status === "downloading" ? "animate-spin" : ""}`} />
+            <div
+              className={`px-3 py-1.5 rounded-full ${details.bgColor} flex items-center space-x-2`}
+            >
+              <StatusIcon
+                className={`w-4 h-4 ${details.color} ${
+                  status === "downloading" ? "animate-spin" : ""
+                }`}
+              />
               <span className={`text-sm ${details.color}`}>{details.text}</span>
             </div>
           </div>
@@ -154,7 +160,10 @@ const UpdateCard = ({
             <h4 className="text-sm font-medium text-white">What's New:</h4>
             <ul className="space-y-1">
               {notes.map((note, index) => (
-                <li key={index} className="text-sm text-gray-400 flex items-start space-x-2">
+                <li
+                  key={index}
+                  className="text-sm text-gray-400 flex items-start space-x-2"
+                >
                   <span>•</span>
                   <span>{note}</span>
                 </li>
@@ -164,15 +173,10 @@ const UpdateCard = ({
 
           {(status === "available" || status === "ready") && (
             <div className="flex space-x-3">
-              <Button
-                className="bg-blue-500 hover:bg-blue-600 text-white"
-              >
+              <Button className="bg-blue-500 hover:bg-blue-600 text-white">
                 {status === "available" ? "Download Now" : "Install Now"}
               </Button>
-              <Button
-                variant="ghost"
-                className="bg-white/5 hover:bg-white/10"
-              >
+              <Button variant="ghost" className="bg-white/5 hover:bg-white/10">
                 Release Notes
               </Button>
             </div>
@@ -187,9 +191,7 @@ export default function SoftwareUpdatePage() {
   const [checkingUpdates, setCheckingUpdates] = useState(false);
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300 h-full" />
-
+    <div className="h-full text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="Software Update"
@@ -203,7 +205,9 @@ export default function SoftwareUpdatePage() {
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-medium text-white">System Information</h3>
+                <h3 className="text-lg font-medium text-white">
+                  System Information
+                </h3>
                 <Button
                   variant="ghost"
                   className="bg-white/5 hover:bg-white/10"
@@ -212,7 +216,11 @@ export default function SoftwareUpdatePage() {
                     setTimeout(() => setCheckingUpdates(false), 2000);
                   }}
                 >
-                  <RefreshCw className={`w-4 h-4 mr-2 ${checkingUpdates ? "animate-spin" : ""}`} />
+                  <RefreshCw
+                    className={`w-4 h-4 mr-2 ${
+                      checkingUpdates ? "animate-spin" : ""
+                    }`}
+                  />
                   Check for Updates
                 </Button>
               </div>
@@ -249,7 +257,7 @@ export default function SoftwareUpdatePage() {
               "New music streaming features",
               "Improved voice recognition accuracy",
               "Bug fixes and stability improvements",
-              "Updated CarPlay and Android Auto integration"
+              "Updated CarPlay and Android Auto integration",
             ]}
           />
 
@@ -259,16 +267,18 @@ export default function SoftwareUpdatePage() {
               <div className="flex items-center space-x-4">
                 <AlertCircle className="w-6 h-6 text-orange-400" />
                 <div>
-                  <p className="text-orange-200 font-medium">Important Update Notice</p>
+                  <p className="text-orange-200 font-medium">
+                    Important Update Notice
+                  </p>
                   <p className="text-sm text-orange-200/80 mt-1">
-                    Vehicle must be in park with the engine running during software updates. 
-                    Updates typically take 20-30 minutes to complete.
+                    Vehicle must be in park with the engine running during
+                    software updates. Updates typically take 20-30 minutes to
+                    complete.
                   </p>
                 </div>
               </div>
             </CardContent>
           </Card>
-
         </div>
       </div>
     </div>

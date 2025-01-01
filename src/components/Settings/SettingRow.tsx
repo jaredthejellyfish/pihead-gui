@@ -1,4 +1,4 @@
-import { type LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function SettingRow({
@@ -6,21 +6,26 @@ function SettingRow({
   title,
   children,
   href,
+  subtitle,
 }: {
   icon: LucideIcon;
   title: string;
   children: React.ReactNode;
   href?: string;
+  subtitle?: string;
 }) {
   const content = (
     <div className="flex items-center justify-between py-4">
       <div className="flex items-center space-x-4">
-        <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-gray-400" />
+        <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
+          <Icon className="w-6 h-6 text-gray-400" />
         </div>
-        <span className="text-gray-200">{title}</span>
+        <div>
+          <h3 className="text-white font-medium">{title}</h3>
+          {subtitle && <p className="text-sm text-gray-400">{subtitle}</p>}
+        </div>
       </div>
-      <div className="flex items-center space-x-2">{children}</div>
+      <div className="flex items-center space-x-4">{children}</div>
     </div>
   );
 

@@ -65,7 +65,11 @@ const DeviceCard = ({
             <div>
               <p className="text-white font-medium">{device.name}</p>
               <p className="text-sm text-gray-400">
-                {device.connected ? "Connected" : device.paired ? "Paired" : "Not paired"}
+                {device.connected
+                  ? "Connected"
+                  : device.paired
+                    ? "Paired"
+                    : "Not paired"}
               </p>
             </div>
           </div>
@@ -190,16 +194,16 @@ export default function BluetoothSettingsPage() {
   const handleConnect = (deviceId: string) => {
     setDevices(
       devices.map((d) =>
-        d.id === deviceId ? { ...d, connected: true } : { ...d, connected: false }
-      )
+        d.id === deviceId
+          ? { ...d, connected: true }
+          : { ...d, connected: false },
+      ),
     );
   };
 
   const handleDisconnect = (deviceId: string) => {
     setDevices(
-      devices.map((d) =>
-        d.id === deviceId ? { ...d, connected: false } : d
-      )
+      devices.map((d) => (d.id === deviceId ? { ...d, connected: false } : d)),
     );
   };
 
@@ -208,9 +212,7 @@ export default function BluetoothSettingsPage() {
   };
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
-
+    <div className="h-full text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="Bluetooth"
@@ -237,10 +239,14 @@ export default function BluetoothSettingsPage() {
                     )}
                   </div>
                   <div>
-                    <h3 className="text-lg font-medium text-white">Bluetooth</h3>
+                    <h3 className="text-lg font-medium text-white">
+                      Bluetooth
+                    </h3>
                     <p className="text-sm text-gray-400">
                       {isBluetoothEnabled
-                        ? `${devices.filter((d) => d.connected).length} devices connected`
+                        ? `${
+                            devices.filter((d) => d.connected).length
+                          } devices connected`
                         : "Disabled"}
                     </p>
                   </div>
@@ -269,7 +275,10 @@ export default function BluetoothSettingsPage() {
                   />
                   {isScanning ? "Scanning..." : "Scan"}
                 </Button>
-                <Button variant="ghost" className="bg-white/5 hover:bg-white/10">
+                <Button
+                  variant="ghost"
+                  className="bg-white/5 hover:bg-white/10"
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Device
                 </Button>

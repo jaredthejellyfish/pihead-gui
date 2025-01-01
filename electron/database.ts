@@ -1,7 +1,7 @@
 import { app } from "electron";
-import fs from "fs";
-import path from "path";
-import { Profile } from "../src/types";
+import fs from "node:fs";
+import path from "node:path";
+import type { Profile } from "../src/types";
 
 const appDataPath = app.getPath("userData");
 const dbPath = path.join(appDataPath, "profiles.json");

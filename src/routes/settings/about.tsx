@@ -15,7 +15,7 @@ import {
   ChevronRight,
   AlertTriangle,
   Car,
-  LucideIcon,
+  type LucideIcon,
 } from "lucide-react";
 
 const InfoRow = ({
@@ -29,8 +29,11 @@ const InfoRow = ({
   value: string;
   onClick?: () => void;
 }) => (
-  <div 
-    className={`flex items-center justify-between py-3 ${onClick ? 'cursor-pointer hover:bg-white/5' : ''}`}
+  <button
+    type="button"
+    className={`flex items-center justify-between py-3 ${
+      onClick ? "cursor-pointer hover:bg-white/5" : ""
+    }`}
     onClick={onClick}
   >
     <div className="flex items-center space-x-3">
@@ -43,7 +46,7 @@ const InfoRow = ({
       <span className="text-white">{value}</span>
       {onClick && <ChevronRight className="w-4 h-4 text-gray-400" />}
     </div>
-  </div>
+  </button>
 );
 
 export default function AboutPage() {
@@ -55,7 +58,7 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
+    <div className="h-full bg-black text-white overflow-scroll ">
       <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
 
       <div className="relative h-full p-8">
@@ -75,7 +78,9 @@ export default function AboutPage() {
                   <Car className="w-10 h-10 text-blue-400" />
                 </div>
                 <div>
-                  <h3 className="text-2xl font-medium text-white">Vehicle Head Unit</h3>
+                  <h3 className="text-2xl font-medium text-white">
+                    Vehicle Head Unit
+                  </h3>
                   <p className="text-gray-400">Model VHU-2024</p>
                 </div>
               </div>
@@ -86,11 +91,7 @@ export default function AboutPage() {
                   label="Software Version"
                   value="2.1.0 (Build 2024.03.15)"
                 />
-                <InfoRow
-                  icon={Cpu}
-                  label="Hardware Version"
-                  value="Rev 3.0"
-                />
+                <InfoRow icon={Cpu} label="Hardware Version" value="Rev 3.0" />
                 <InfoRow
                   icon={Car}
                   label="Vehicle Integration"
@@ -101,11 +102,7 @@ export default function AboutPage() {
                   label="Storage"
                   value="32GB (13.2GB free)"
                 />
-                <InfoRow
-                  icon={Database}
-                  label="Map Database"
-                  value="2024.Q1"
-                />
+                <InfoRow icon={Database} label="Map Database" value="2024.Q1" />
                 <InfoRow
                   icon={Wifi}
                   label="Wi-Fi MAC Address"
@@ -123,7 +120,9 @@ export default function AboutPage() {
           {/* Diagnostics */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <h3 className="text-lg font-medium text-white mb-4">System Health</h3>
+              <h3 className="text-lg font-medium text-white mb-4">
+                System Health
+              </h3>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-2">
@@ -133,7 +132,9 @@ export default function AboutPage() {
                       <Shield className="w-5 h-5 text-green-400" />
                     )}
                     <span className="text-gray-400">
-                      {diagRunning ? "Running diagnostics..." : "System functioning normally"}
+                      {diagRunning
+                        ? "Running diagnostics..."
+                        : "System functioning normally"}
                     </span>
                   </div>
                   <Button
@@ -152,7 +153,9 @@ export default function AboutPage() {
           {/* Legal & Compliance */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <h3 className="text-lg font-medium text-white mb-4">Legal & Compliance</h3>
+              <h3 className="text-lg font-medium text-white mb-4">
+                Legal & Compliance
+              </h3>
               <div className="space-y-1 divide-y divide-white/10">
                 <InfoRow
                   icon={FileText}
@@ -182,11 +185,12 @@ export default function AboutPage() {
             </CardContent>
           </Card>
 
-
           {/* Reset Options */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <h3 className="text-lg font-medium text-white mb-4">Reset Options</h3>
+              <h3 className="text-lg font-medium text-white mb-4">
+                Reset Options
+              </h3>
               <div className="space-y-4">
                 <Button
                   variant="ghost"

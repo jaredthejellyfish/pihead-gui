@@ -56,7 +56,7 @@ const BalanceControl = () => {
   };
 
   return (
-    <div 
+    <div
       ref={containerRef}
       className="relative w-[200px] h-[200px] mx-auto my-4 touch-none select-none"
       onPointerDown={handlePointerDown}
@@ -77,7 +77,7 @@ const BalanceControl = () => {
           <div className="absolute left-1/4 top-0 bottom-0 w-px bg-white/10" />
           <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/20" />
           <div className="absolute left-3/4 top-0 bottom-0 w-px bg-white/10" />
-          
+
           {/* Horizontal lines */}
           <div className="absolute top-1/4 left-0 right-0 h-px bg-white/10" />
           <div className="absolute top-1/2 left-0 right-0 h-px bg-white/20" />
@@ -85,10 +85,18 @@ const BalanceControl = () => {
         </div>
 
         {/* Corner indicators */}
-        <div className="absolute top-2 left-2 text-[10px] font-medium text-white/40">FL</div>
-        <div className="absolute top-2 right-2 text-[10px] font-medium text-white/40">FR</div>
-        <div className="absolute bottom-2 left-2 text-[10px] font-medium text-white/40">RL</div>
-        <div className="absolute bottom-2 right-2 text-[10px] font-medium text-white/40">RR</div>
+        <div className="absolute top-2 left-2 text-[10px] font-medium text-white/40">
+          FL
+        </div>
+        <div className="absolute top-2 right-2 text-[10px] font-medium text-white/40">
+          FR
+        </div>
+        <div className="absolute bottom-2 left-2 text-[10px] font-medium text-white/40">
+          RL
+        </div>
+        <div className="absolute bottom-2 right-2 text-[10px] font-medium text-white/40">
+          RR
+        </div>
       </div>
 
       {/* Control point */}
@@ -99,7 +107,7 @@ const BalanceControl = () => {
           "rounded-full shadow-lg shadow-blue-500/20",
           "border border-white/20",
           "cursor-grab active:cursor-grabbing",
-          "transform hover:scale-110 active:scale-95"
+          "transform hover:scale-110 active:scale-95",
         )}
         style={{
           left: `${50 + (position.x / 100) * 50}%`,
@@ -120,7 +128,6 @@ const BalanceControl = () => {
       <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 text-sm font-medium text-white/60">
         Right
       </div>
-
     </div>
   );
 };
@@ -183,9 +190,7 @@ export default function SoundSettingsPage() {
   });
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300 h-full" />
-
+    <div className="h-full text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="Sound"
@@ -215,7 +220,7 @@ export default function SoundSettingsPage() {
                   onChange={(e) => {
                     setEqProfile(e.target.value);
                     const selectedProfile = eqProfiles.find(
-                      (p) => p.id === e.target.value
+                      (p) => p.id === e.target.value,
                     );
                     if (selectedProfile) {
                       const newBands = Object.fromEntries(
@@ -225,8 +230,8 @@ export default function SoundSettingsPage() {
                               ? `${parseInt(freq) / 1000}k`
                               : `${freq}Hz`,
                             [value],
-                          ]
-                        )
+                          ],
+                        ),
                       ) as typeof eqBands;
                       setEqBands(newBands);
                     }

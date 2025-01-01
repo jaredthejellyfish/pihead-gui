@@ -5,7 +5,6 @@ import {
   SkipForward,
   SkipBack,
   Music,
-  MapPin,
   Thermometer,
   Fuel,
   Volume2,
@@ -41,7 +40,7 @@ function QuickAccessCard({
   gradient: string;
 }) {
   return (
-    <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden hover:bg-white/10 transition-all duration-300 aspect-maybevideo max-h-[120px] w-full">
+    <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden hover:bg-white/10 transition-all duration-300  max-h-[120px] w-full">
       <CardContent className="p-6">
         <div className="flex items-center space-x-4">
           {image && (
@@ -165,9 +164,7 @@ export default function HomeScreen() {
   };
 
   return (
-    <div className="bg-black text-white overflow-auto aspect-maybevideo relative h-screen">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
-
+    <div className="text-white overflow-auto  relative h-screen">
       <div className="relative h-full p-8">
         {/* Top Status Bar */}
         <div className="flex items-start justify-between mb-4">
@@ -189,6 +186,7 @@ export default function HomeScreen() {
           <div className="flex justify-end items-center space-x-4">
             <Volume2
               className="w-6 h-6 text-blue-400"
+              role="button"
               onClick={() => setVolumeControlOpen(true)}
             />
             <Thermometer className="w-6 h-6 text-blue-400" />

@@ -1,9 +1,4 @@
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-
-import { Slider } from "@/components/ui/slider";
-import Header from "@/components/Header";
 import {
   Sun,
   Moon,
@@ -13,8 +8,12 @@ import {
   ParkingSquare,
   Camera,
   Lightbulb,
-  LucideIcon,
 } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+
+import { Slider } from "@/components/ui/slider";
+import Header from "@/components/Header";
 import {
   Select,
   SelectContent,
@@ -22,31 +21,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-const SettingRow = ({
-  icon: Icon,
-  title,
-  subtitle,
-  children,
-}: {
-  icon: LucideIcon;
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
-}) => (
-  <div className="flex items-center justify-between py-4">
-    <div className="flex items-center space-x-4">
-      <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
-        <Icon className="w-6 h-6 text-gray-400" />
-      </div>
-      <div>
-        <h3 className="text-white font-medium">{title}</h3>
-        {subtitle && <p className="text-sm text-gray-400">{subtitle}</p>}
-      </div>
-    </div>
-    <div className="flex items-center space-x-4">{children}</div>
-  </div>
-);
+import { cn } from "@/lib/utils";
+import SettingRow from "@/components/Settings/SettingRow";
+import ThemeSelection from "@/components/Settings/ThemeSelector";
 
 export default function DisplaySettingsPage() {
   const [brightness, setBrightness] = useState([75]);
@@ -56,11 +33,10 @@ export default function DisplaySettingsPage() {
   const [screenTimeout, setScreenTimeout] = useState([5]); // minutes when parked
   const [reverseCamera, setReverseCamera] = useState(true);
   const [glareReduction, setGlareReduction] = useState(true);
+  const [theme, setTheme] = useState("purple");
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300 h-full" />
-
+    <div className="h-full text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="Display"
@@ -105,6 +81,9 @@ export default function DisplaySettingsPage() {
               )}
             </CardContent>
           </Card>
+
+          {/* Theme Selection */}
+          <ThemeSelection />
 
           {/* Day/Night Mode */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">

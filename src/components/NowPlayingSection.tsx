@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   Music,
   SkipBack,
@@ -8,10 +8,10 @@ import {
   Pause,
   SkipForward,
   Volume2,
-} from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
+} from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 
 interface Song {
   title: string;
@@ -22,10 +22,10 @@ interface Song {
 
 export default function HorizontalNowPlayingCard() {
   const [currentSong, setCurrentSong] = useState<Song>({
-    title: 'Starlight',
-    artist: 'Muse',
-    album: 'Black Holes and Revelations',
-    coverArt: '/placeholder.svg?height=200&width=200',
+    title: "Starlight",
+    artist: "Muse",
+    album: "Black Holes and Revelations",
+    coverArt: "/placeholder.svg?height=200&width=200",
   });
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -45,7 +45,7 @@ export default function HorizontalNowPlayingCard() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (

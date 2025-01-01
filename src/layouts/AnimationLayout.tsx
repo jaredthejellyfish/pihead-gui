@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
+import type { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 
 interface AnimationLayoutProps {
@@ -9,16 +9,22 @@ interface AnimationLayoutProps {
 const pageVariants = {
   initial: {
     opacity: 0,
+    x: 500,
   },
   in: {
     opacity: 1,
+    x: 0,
+  },
+  out: {
+    opacity: 0,
+    x: -500,
   },
 };
 
 const pageTransition = {
   type: "tween",
   ease: "anticipate",
-  duration: 0.2,
+  duration: 0.3,
 };
 
 function AnimationLayout({ children }: AnimationLayoutProps) {

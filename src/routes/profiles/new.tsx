@@ -16,10 +16,10 @@ import {
 export default function NewProfilePage() {
   const [name, setName] = useState("");
   const [profileType, setProfileType] = useState<"driver" | "passenger" | null>(
-    null
+    null,
   );
   const [theme, setTheme] = useState<"blue" | "purple" | "green" | "orange">(
-    "blue"
+    "blue",
   );
   const [musicPreference, setMusicPreference] = useState("");
   const navigate = useNavigate();
@@ -45,9 +45,7 @@ export default function NewProfilePage() {
   const isValid = name.trim().length >= 2 && profileType !== null;
 
   return (
-    <div className="h-screen bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
-
+    <div className="h-screen text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="New Profile"
@@ -60,7 +58,10 @@ export default function NewProfilePage() {
           {/* Profile Name */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <label className="block text-sm text-gray-400 mb-2" htmlFor="name">
+              <label
+                className="block text-sm text-gray-400 mb-2"
+                htmlFor="name"
+              >
                 Profile Name
               </label>
               <Input
@@ -80,7 +81,10 @@ export default function NewProfilePage() {
           {/* Profile Type */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <label className="block text-sm text-gray-400 mb-4">
+              <label
+                className="block text-sm text-gray-400 mb-4"
+                htmlFor="profile-type"
+              >
                 Profile Type
               </label>
               <div className="grid grid-cols-2 gap-4">
@@ -126,13 +130,16 @@ export default function NewProfilePage() {
           {/* Theme Selection */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <label className="block text-sm text-gray-400 mb-2">
+              <label
+                className="block text-sm text-gray-400 mb-2"
+                htmlFor="theme-color"
+              >
                 Theme Color
               </label>
               <Select
                 value={theme}
                 onValueChange={(
-                  value: "blue" | "purple" | "green" | "orange"
+                  value: "blue" | "purple" | "green" | "orange",
                 ) => setTheme(value)}
               >
                 <SelectTrigger className="bg-white/5 border-0 text-white">
@@ -151,7 +158,10 @@ export default function NewProfilePage() {
           {/* Music Preference */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
-              <label className="block text-sm text-gray-400 mb-2">
+              <label
+                className="block text-sm text-gray-400 mb-2"
+                htmlFor="music-preference"
+              >
                 Music Preference
               </label>
               <div className="flex items-center space-x-2">

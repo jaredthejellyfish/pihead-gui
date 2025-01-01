@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import { AlertTriangle, Trash, User } from "lucide-react";
-import type {  Profile } from "@/types";
+import type { Profile } from "@/types";
 
 export default function DeleteProfilePage() {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,14 +24,13 @@ export default function DeleteProfilePage() {
       setIsDeleting(true);
       const activeProfile = await window.electron.getActiveProfile();
 
-      
       if (!activeProfile?.id) {
         console.error("No active profile found");
         return;
       }
 
       const success = await window.electron.deleteProfile(activeProfile.id);
-      
+
       if (success) {
         navigate("/profiles");
       } else {
@@ -45,9 +44,7 @@ export default function DeleteProfilePage() {
   };
 
   return (
-    <div className="h-full bg-black text-white overflow-scroll aspect-maybevideo">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
-
+    <div className="h-full text-white overflow-scroll ">
       <div className="relative h-full p-8">
         <Header
           title="Delete Profile"
@@ -69,8 +66,9 @@ export default function DeleteProfilePage() {
                     Delete Profile Permanently
                   </h3>
                   <p className="text-gray-300 text-sm leading-relaxed">
-                    This action cannot be undone. This will permanently delete your
-                    profile, including all settings, preferences, and saved data.
+                    This action cannot be undone. This will permanently delete
+                    your profile, including all settings, preferences, and saved
+                    data.
                   </p>
                 </div>
               </div>
@@ -105,7 +103,7 @@ export default function DeleteProfilePage() {
               <Trash className="w-5 h-5 mr-2" />
               {isDeleting ? "Deleting..." : "Delete Profile"}
             </Button>
-            
+
             <Button
               variant="ghost"
               className="bg-white/5 hover:bg-white/10 text-white w-full py-6"
