@@ -1,4 +1,3 @@
-// @see - https://www.electron.build/configuration/configuration
 {
   $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
   appId: "com.jaredthejellyfish.pihead-gui",
@@ -8,12 +7,25 @@
   directories: {
     output: "release/${version}",
   },
-  files: ["dist", "dist-electron"],
+  files: [
+    "dist",
+    "dist-electron"
+  ],
+  asarUnpack: [
+    "**/*.node",
+    "node_modules/loudness/**/*",
+    "node_modules/sqlite-electron/**/*",
+    "node_modules/better-sqlite3/**/*"
+  ],
   mac: {
     target: ["dmg"],
     artifactName: "${productName}-Mac-${version}-Installer.${ext}",
     icon: "icons/icon.png",
     darkModeSupport: true,
+    hardenedRuntime: true,
+    gatekeeperAssess: false,
+    entitlements: "build/entitlements.mac.plist",
+    entitlementsInherit: "build/entitlements.mac.plist"
   },
   nsis: {
     oneClick: false,
@@ -23,7 +35,7 @@
   },
   linux: {
     target: ["AppImage", "tar.xz"],
-    artifactName: "${productName}-Linux-${version}.${ext}",
+    artifactName: "${productName}-Linux-ARM64-${version}.${ext}",
     icon: "icons/icon.png",
     category: "Utility",
     asarUnpack: ["**/*.node"],
@@ -31,7 +43,20 @@
     maintainer: "jaredthejellyfish",
     synopsis: "PiHead GUI Application",
     compression: "maximum",
+    desktop: {
+      Name: "PiHead GUI",
+      Comment: "PiHead GUI Application",
+      Categories: "Utility;",
+      Terminal: false
+    }
   },
+  fileAssociations: [
+    {
+      ext: "pihead",
+      name: "PiHead File",
+      role: "Editor"
+    }
+  ],
   publish: [
     {
       provider: "github",
@@ -39,4 +64,5 @@
       repo: "pihead-gui",
     },
   ],
+  buildDependenciesFromSource: true,
 }
