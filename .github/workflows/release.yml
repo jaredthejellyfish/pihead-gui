@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [ubuntu-latest]
         include:
           - os: ubuntu-latest
             platform: linux
@@ -56,13 +56,6 @@ jobs:
         run: |
           bun run tsc
           bun run vite build
-
-      # macOS build
-      - name: Build macOS
-        if: matrix.os == 'macos-latest'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun run electron-builder --mac --publish always
 
       # Linux ARM build
       - name: Build Linux ARM
