@@ -38,7 +38,7 @@ export default function SettingsScreen() {
     mutateProfile(settings);
   }, [settings, mutateProfile]);
 
-  const updateSettings = (key: keyof typeof settings, value: any) => {
+  const updateSettings = (key: keyof typeof settings, value: string | number | boolean) => {
     setSettings((prev) => ({
       ...prev,
       [key]: value,

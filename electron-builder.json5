@@ -1,9 +1,10 @@
 // @see - https://www.electron.build/configuration/configuration
 {
   $schema: "https://raw.githubusercontent.com/electron-userland/electron-builder/master/packages/app-builder-lib/scheme.json",
-  appId: "YourAppID",
+  appId: "com.jaredthejellyfish.pihead-gui",
   asar: true,
-  productName: "YourAppName",
+  productName: "pihead-gui",
+  compression: "maximum",
   directories: {
     output: "release/${version}",
   },
@@ -11,15 +12,8 @@
   mac: {
     target: ["dmg"],
     artifactName: "${productName}-Mac-${version}-Installer.${ext}",
-  },
-  win: {
-    target: [
-      {
-        target: "nsis",
-        arch: ["x64"],
-      },
-    ],
-    artifactName: "${productName}-Windows-${version}-Setup.${ext}",
+    icon: "icons/icon.png",
+    darkModeSupport: true,
   },
   nsis: {
     oneClick: false,
@@ -28,8 +22,15 @@
     deleteAppDataOnUninstall: false,
   },
   linux: {
-    target: ["AppImage"],
+    target: ["AppImage", "tar.xz"],
     artifactName: "${productName}-Linux-${version}.${ext}",
+    icon: "icons/icon.png",
+    category: "Utility",
+    asarUnpack: ["**/*.node"],
+    executableName: "pihead-gui",
+    maintainer: "jaredthejellyfish",
+    synopsis: "PiHead GUI Application",
+    compression: "maximum",
   },
   publish: [
     {
