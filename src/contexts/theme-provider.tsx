@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useActiveProfile } from "./active-profile-provider";
 
-type Theme = "blue" | "purple" | "green" | "orange" | "dark";
+export type Theme = "blue" | "purple" | "green" | "orange" | "dark";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -28,23 +29,25 @@ export function ThemeProvider({
   storageKey = "vite-ui-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-  );
-  const [lastTheme, setLastTheme] = useState<Theme>(
-    () => (localStorage.getItem(`${storageKey}-last`) as Theme) || defaultTheme,
-  );
+  const [theme, setTheme] = useState<Theme>(defaultTheme);
+  const [lastTheme, setLastTheme] = useState<Theme>(defaultTheme);
+  const { activeProfile } = useActiveProfile();
+
+  // Update theme when active profile changes
+  useEffect(() => {
+    if (activeProfile?.theme) {
+      setTheme(activeProfile.theme);
+      setLastTheme(activeProfile.theme);
+    } else {
+      setTheme(defaultTheme);
+      setLastTheme(defaultTheme);
+    }
+  }, [activeProfile, defaultTheme]);
 
   // Apply theme changes
   useEffect(() => {
     document.body.className = theme;
   }, [theme]);
-
-  // Persist theme selections
-  useEffect(() => {
-    localStorage.setItem(storageKey, theme);
-    localStorage.setItem(`${storageKey}-last`, lastTheme);
-  }, [theme, lastTheme, storageKey]);
 
   const value = {
     theme,

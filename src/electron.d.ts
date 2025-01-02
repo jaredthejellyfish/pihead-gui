@@ -1,7 +1,7 @@
 /* eslint-disable */
 /* @typescript-eslint-disable */
 
-import { Profile } from "./types";
+import type { Profile, DiskStorage } from "./types";
 
 export interface IElectronAPI {
   ipcRenderer: {
@@ -23,7 +23,7 @@ declare global {
       addProfile: (profile: Profile) => Promise<Profile>;
       updateProfile: (profile: Profile) => Promise<Profile | null>;
       deleteProfile: (id: number) => Promise<boolean>;
-      setActiveProfile: (id: number) => Promise<Profile | null>;
+      setActiveProfile: (id?: string) => Promise<Profile | null>;
       getVolume: () => Promise<number>;
       setVolume: (volume: number) => Promise<void>;
       mute: () => Promise<void>;
@@ -31,6 +31,9 @@ declare global {
       getMuted: () => Promise<boolean>;
       setMuted: (muted: boolean) => Promise<void>;
       getActiveProfile: () => Promise<Profile | null>;
+      getAppVersion: () => Promise<string>;
+      getDiskStorage: () => Promise<DiskStorage>;
+      getMacAddresses: () => Promise<{ wifi: string | null; bluetooth: string | null }>;
     };
   }
 }

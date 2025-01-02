@@ -2,8 +2,8 @@ import electron, { BrowserWindow, app, shell, ipcMain } from "electron";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
-import process$1 from "node:process";
 import fs from "node:fs";
+import process$1 from "node:process";
 import require$$0$4 from "os";
 import require$$0$2 from "path";
 import require$$0$3 from "child_process";
@@ -13,6 +13,7 @@ import require$$2 from "events";
 import require$$0$7 from "buffer";
 import require$$0$6 from "stream";
 import require$$2$1 from "util";
+import os$1 from "node:os";
 function isFullwidthCodePoint(codePoint) {
   if (!Number.isInteger(codePoint)) {
     return false;
@@ -11880,7 +11881,7 @@ const addProfile = (profile) => {
   const profiles = getProfiles();
   const newProfile = {
     ...profile,
-    id: Date.now(),
+    id: crypto.randomUUID().toString(),
     // Simple way to generate unique IDs
     isActive: false
   };
@@ -14205,7 +14206,7 @@ const loudness$1 = /* @__PURE__ */ getDefaultExportFromCjs(loudness);
 createRequire(import.meta.url);
 const __dirname$1 = path.dirname(fileURLToPath(import.meta.url));
 process.env.APP_ROOT = path.join(__dirname$1, "..");
-const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
+const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL ? path.join(process.env.APP_ROOT, "public") : RENDERER_DIST;
@@ -14276,6 +14277,70 @@ ipcMain.handle("get-muted", async () => {
 });
 ipcMain.handle("set-muted", async (_, muted) => {
   await loudness$1.setMuted(muted);
+});
+ipcMain.handle("get-app-version", () => {
+  return app.getVersion();
+});
+const getRootPath = () => {
+  switch (process.platform) {
+    case "win32":
+      return "C:\\";
+    case "darwin":
+      return "/";
+    default:
+      return "/";
+  }
+};
+ipcMain.handle("get-disk-storage", () => {
+  try {
+    const rootPath = getRootPath();
+    const stats = fs.statfsSync(rootPath);
+    const blockSize = stats.bsize;
+    const totalBlocks = stats.blocks;
+    const freeBlocks = stats.bfree;
+    const totalGB = Math.round(totalBlocks * blockSize / 1024 / 1024 / 1024 * 10) / 10;
+    const freeGB = Math.round(freeBlocks * blockSize / 1024 / 1024 / 1024 * 10) / 10;
+    const usedGB = Math.round((totalGB - freeGB) * 10) / 10;
+    return {
+      free: freeGB,
+      total: totalGB,
+      used: usedGB
+    };
+  } catch (error2) {
+    console.error("Error fetching disk space:", error2);
+    throw error2;
+  }
+});
+ipcMain.handle("get-mac-addresses", async () => {
+  try {
+    const interfaces = os$1.networkInterfaces();
+    const macAddresses = {
+      wifi: null,
+      bluetooth: null
+    };
+    for (const [ifaceName, ifaceDetails] of Object.entries(interfaces)) {
+      if (!ifaceDetails) continue;
+      for (const details of ifaceDetails) {
+        if (!details.internal && details.mac !== "00:00:00:00:00:00") {
+          const lowerIfaceName = ifaceName.toLowerCase();
+          if (lowerIfaceName.includes("wifi") || // Common Wi-Fi naming
+          lowerIfaceName.includes("wlan") || // Linux
+          lowerIfaceName.startsWith("en")) {
+            macAddresses.wifi = details.mac;
+          }
+          if (lowerIfaceName.includes("bluetooth") || // Common Bluetooth naming
+          lowerIfaceName.includes("bt") || // Linux/Mac naming
+          lowerIfaceName.includes("pan")) {
+            macAddresses.bluetooth = details.mac;
+          }
+        }
+      }
+    }
+    return macAddresses;
+  } catch (error2) {
+    console.error("Error fetching MAC addresses:", error2);
+    throw error2;
+  }
 });
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {

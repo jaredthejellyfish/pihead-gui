@@ -14,5 +14,8 @@ electron.contextBridge.exposeInMainWorld("electron", {
   unmute: () => electron.ipcRenderer.invoke("unmute"),
   getMuted: () => electron.ipcRenderer.invoke("get-muted"),
   setMuted: (muted) => electron.ipcRenderer.invoke("set-muted", muted),
-  getActiveProfile: () => electron.ipcRenderer.invoke("get-active-profile")
+  getActiveProfile: () => electron.ipcRenderer.invoke("get-active-profile"),
+  getAppVersion: () => electron.ipcRenderer.invoke("get-app-version"),
+  getDiskStorage: () => electron.ipcRenderer.invoke("get-disk-storage"),
+  getMacAddresses: () => electron.ipcRenderer.invoke("get-mac-addresses")
 });

@@ -1,13 +1,11 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import {
   Info,
   Radio,
-  Cpu,
   HardDrive,
-  Database,
   Wifi,
   Bluetooth,
   Shield,
@@ -17,6 +15,8 @@ import {
   Car,
   type LucideIcon,
 } from "lucide-react";
+import { useMutateProfile } from "@/hooks/useMutateProfile";
+import { defaultEQProfile } from "@/data/eq-profiles";
 
 const InfoRow = ({
   icon: Icon,
@@ -31,7 +31,7 @@ const InfoRow = ({
 }) => (
   <button
     type="button"
-    className={`flex items-center justify-between py-3 ${
+    className={`flex items-center justify-between py-3 w-full ${
       onClick ? "cursor-pointer hover:bg-white/5" : ""
     }`}
     onClick={onClick}
@@ -49,17 +49,82 @@ const InfoRow = ({
   </button>
 );
 
+type AppData = {
+  appVersion: string;
+  diskStorage: {
+    free: number;
+    total: number;
+    used: number;
+  };
+  macAddresses: {
+    wifi: string | null;
+    bluetooth: string | null;
+  };
+};
+
 export default function AboutPage() {
   const [diagRunning, setDiagRunning] = useState(false);
+  const { mutateProfile } = useMutateProfile();
+  const [appData, setAppData] = useState<AppData>({
+    appVersion: "",
+    diskStorage: {
+      free: 0,
+      total: 0,
+      used: 0,
+    },
+    macAddresses: {
+      wifi: null,
+      bluetooth: null,
+    },
+  });
 
   const runDiagnostics = () => {
     setDiagRunning(true);
     setTimeout(() => setDiagRunning(false), 3000);
   };
 
+  const getAppData = useCallback(async () => {
+    const version = await window.electron.getAppVersion();
+    const diskStorage = await window.electron.getDiskStorage();
+    const macAddresses = await window.electron.getMacAddresses();
+    setAppData({
+      appVersion: version,
+      diskStorage,
+      macAddresses,
+    });
+  }, []);
+
+  useEffect(() => {
+    getAppData();
+  }, [getAppData]);
+
+  async function resetAllSettings() {
+    await mutateProfile({
+      // display settings
+      brightness: 75,
+      autoBrightness: true,
+      autoNightMode: true,
+      screenTimeout: 10,
+      reverseCamera: true,
+      glareReduction: true,
+      standbyDisplay: true,
+
+      // general settings
+      notifications: true,
+
+      // sound settings
+      eqBands: defaultEQProfile,
+      balance: { x: 0, y: 0 },
+      loudness: true,
+      surround: true,
+      dynamicEQ: false,
+      roadNoiseCompensation: true,
+    });
+  }
+
   return (
     <div className="h-full bg-black text-white overflow-scroll ">
-      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-blue-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
+      <div className="fixed top-0 left-0 right-0 bottom-0 bg-gradient-to-br from-indigo-900/30 via-purple-900/20 to-black pointer-events-none dark:opacity-0 h-full transition-opacity duration-300" />
 
       <div className="relative h-full p-8">
         <Header
@@ -74,8 +139,8 @@ export default function AboutPage() {
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4 mb-6">
-                <div className="w-16 h-16 rounded-2xl bg-blue-500/20 flex items-center justify-center">
-                  <Car className="w-10 h-10 text-blue-400" />
+                <div className="w-16 h-16 rounded-2xl bg-indigo-500/20 flex items-center justify-center">
+                  <Car className="w-10 h-10 text-indigo-400" />
                 </div>
                 <div>
                   <h3 className="text-2xl font-medium text-white">
@@ -89,29 +154,22 @@ export default function AboutPage() {
                 <InfoRow
                   icon={Radio}
                   label="Software Version"
-                  value="2.1.0 (Build 2024.03.15)"
-                />
-                <InfoRow icon={Cpu} label="Hardware Version" value="Rev 3.0" />
-                <InfoRow
-                  icon={Car}
-                  label="Vehicle Integration"
-                  value="v1.2.3"
+                  value={appData.appVersion}
                 />
                 <InfoRow
                   icon={HardDrive}
                   label="Storage"
-                  value="32GB (13.2GB free)"
+                  value={`${appData.diskStorage.total}GB (${appData.diskStorage.free}GB free)`}
                 />
-                <InfoRow icon={Database} label="Map Database" value="2024.Q1" />
                 <InfoRow
                   icon={Wifi}
                   label="Wi-Fi MAC Address"
-                  value="00:1B:44:11:3A:B7"
+                  value={appData.macAddresses.wifi || "N/A"}
                 />
                 <InfoRow
                   icon={Bluetooth}
                   label="Bluetooth Address"
-                  value="00:1B:44:11:3A:B8"
+                  value={appData.macAddresses.bluetooth || "N/A"}
                 />
               </div>
             </CardContent>
@@ -195,15 +253,9 @@ export default function AboutPage() {
                 <Button
                   variant="ghost"
                   className="w-full justify-between bg-white/5 hover:bg-white/10 text-white hover:text-white"
+                  onClick={resetAllSettings}
                 >
                   Reset All Settings
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  className="w-full justify-between bg-white/5 hover:bg-white/10 text-red-400 hover:text-red-300"
-                >
-                  Factory Reset
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>

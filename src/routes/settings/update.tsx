@@ -75,8 +75,8 @@ const UpdateCard = ({
         return {
           icon: Download,
           text: "Available to download",
-          color: "text-blue-400",
-          bgColor: "bg-blue-500/20",
+          color: "text-indigo-400",
+          bgColor: "bg-indigo-500/20",
         };
       case "downloading":
         return {
@@ -173,7 +173,7 @@ const UpdateCard = ({
 
           {(status === "available" || status === "ready") && (
             <div className="flex space-x-3">
-              <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+              <Button className="bg-indigo-500 hover:bg-indigo-600 text-white">
                 {status === "available" ? "Download Now" : "Install Now"}
               </Button>
               <Button variant="ghost" className="bg-white/5 hover:bg-white/10">

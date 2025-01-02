@@ -2,11 +2,16 @@ import { Sun } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import SettingRow from "./SettingRow";
-import { useTheme } from "@/contexts/theme-provider";
+import { Theme, useTheme } from "@/contexts/theme-provider";
+import { useEffect } from "react";
 
-type Theme = "blue" | "purple" | "green" | "orange" | "dark";
 
-const ThemeSelection = () => {
+
+const ThemeSelection = ({
+  onThemeChange,
+}: {
+  onThemeChange: (theme: Theme) => void;
+}) => {
   const { theme, setTheme } = useTheme();
 
   const themes = [
@@ -18,7 +23,7 @@ const ThemeSelection = () => {
     {
       name: "Blue",
       value: "blue",
-      gradient: "from-blue-500/80 to-blue-900",
+      gradient: "from-indigo-500/80 to-indigo-900",
     },
     {
       name: "Green",
@@ -36,6 +41,10 @@ const ThemeSelection = () => {
       gradient: "from-gray-700/80 to-gray-900",
     },
   ];
+
+  useEffect(() => {
+    onThemeChange(theme);
+  }, [theme]);
 
   return (
     <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
@@ -58,7 +67,7 @@ const ThemeSelection = () => {
                   themeOption.gradient,
                   theme === themeOption.value
                     ? "ring-2 ring-white ring-offset-2 ring-offset-black"
-                    : "hover:ring-1 hover:ring-white/50",
+                    : "hover:ring-1 hover:ring-white/50"
                 )}
                 title={themeOption.name}
               >

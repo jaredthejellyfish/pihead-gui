@@ -3,7 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Header from "@/components/Header";
-import { User, Users, Plus, Check, ChevronsRight, Music } from "lucide-react";
+import { User, Users, Plus, Check, ChevronsRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Select,
@@ -12,26 +12,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { Theme } from "@/contexts/theme-provider";
+import { defaultEQProfile } from "@/data/eq-profiles";
 
 export default function NewProfilePage() {
   const [name, setName] = useState("");
   const [profileType, setProfileType] = useState<"driver" | "passenger" | null>(
-    null,
+    null
   );
   const [theme, setTheme] = useState<"blue" | "purple" | "green" | "orange">(
-    "blue",
+    "blue"
   );
-  const [musicPreference, setMusicPreference] = useState("");
+
   const navigate = useNavigate();
 
   const handleCreateProfile = async () => {
     try {
       const newProfile = await window.electron.addProfile({
         name,
-        theme,
+        theme: theme as Theme,
         isActive: false,
-        musicPreference,
         lastTrip: "No trips yet",
+        brightness: 80,
+        autoBrightness: true,
+        autoNightMode: true,
+        screenTimeout: 300,
+        reverseCamera: false,
+        glareReduction: true,
+        standbyDisplay: true,
+        notifications: true,
+        eqBands: defaultEQProfile,
+        balance: { x: 0, y: 0 },
+        loudness: true,
+        surround: false,
+        dynamicEQ: true,
+        roadNoiseCompensation: true,
       });
 
       if (newProfile) {
@@ -69,7 +84,7 @@ export default function NewProfilePage() {
                 placeholder="Enter name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="bg-white/5 border-0 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500"
+                className="bg-white/5 border-0 text-white placeholder-gray-500 focus:ring-2 focus:ring-indigo-500"
                 maxLength={20}
               />
               <p className="text-xs text-gray-500 mt-2">
@@ -90,10 +105,10 @@ export default function NewProfilePage() {
               <div className="grid grid-cols-2 gap-4">
                 <Button
                   variant="ghost"
-                  className={`h-24 relative text-neutral-300 hover:text-neutral-300 ${
+                  className={`h-24 relative !text-neutral-300 ${
                     profileType === "driver"
-                      ? "bg-blue-500/20 ring-2 ring-blue-500"
-                      : "bg-white/5 hover:bg-white/10"
+                      ? "!bg-indigo-500/20 ring-2 ring-indigo-500 !text-white hover:!text-white"
+                      : "!bg-white/5 hover:!bg-white/10 hover:!text-neutral-300"
                   }`}
                   onClick={() => setProfileType("driver")}
                 >
@@ -102,16 +117,16 @@ export default function NewProfilePage() {
                     <span>Driver</span>
                   </div>
                   {profileType === "driver" && (
-                    <Check className="absolute top-2 right-2 w-4 h-4 text-blue-400" />
+                    <Check className="absolute top-2 right-2 w-4 h-4 text-indigo-400" />
                   )}
                 </Button>
 
                 <Button
                   variant="ghost"
-                  className={`h-24 relative text-neutral-300 hover:text-neutral-300 ${
+                  className={`h-24 relative !text-neutral-300 ${
                     profileType === "passenger"
-                      ? "bg-blue-500/20 ring-2 ring-blue-500"
-                      : "bg-white/5 hover:bg-white/10"
+                      ? "!bg-indigo-500/20 ring-2 ring-indigo-500 !text-white hover:!text-white"
+                      : "!bg-white/5 hover:!bg-white/10 hover:!text-neutral-300"
                   }`}
                   onClick={() => setProfileType("passenger")}
                 >
@@ -120,7 +135,7 @@ export default function NewProfilePage() {
                     <span>Passenger</span>
                   </div>
                   {profileType === "passenger" && (
-                    <Check className="absolute top-2 right-2 w-4 h-4 text-blue-400" />
+                    <Check className="absolute top-2 right-2 w-4 h-4 text-indigo-400" />
                   )}
                 </Button>
               </div>
@@ -139,7 +154,7 @@ export default function NewProfilePage() {
               <Select
                 value={theme}
                 onValueChange={(
-                  value: "blue" | "purple" | "green" | "orange",
+                  value: "blue" | "purple" | "green" | "orange"
                 ) => setTheme(value)}
               >
                 <SelectTrigger className="bg-white/5 border-0 text-white">
@@ -155,31 +170,6 @@ export default function NewProfilePage() {
             </CardContent>
           </Card>
 
-          {/* Music Preference */}
-          <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
-            <CardContent className="p-6">
-              <label
-                className="block text-sm text-gray-400 mb-2"
-                htmlFor="music-preference"
-              >
-                Music Preference
-              </label>
-              <div className="flex items-center space-x-2">
-                <Music className="w-4 h-4 text-gray-400" />
-                <Input
-                  type="text"
-                  placeholder="Enter your music preference"
-                  value={musicPreference}
-                  onChange={(e) => setMusicPreference(e.target.value)}
-                  className="bg-white/5 border-0 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-              <p className="text-xs text-gray-500 mt-2">
-                What kind of music do you prefer while traveling?
-              </p>
-            </CardContent>
-          </Card>
-
           {/* Create Button */}
           <div className="flex justify-end space-x-3">
             <Link to="/profiles">
@@ -191,7 +181,7 @@ export default function NewProfilePage() {
               </Button>
             </Link>
             <Button
-              className="bg-blue-500 hover:bg-blue-600 text-white space-x-2"
+              className="bg-indigo-500 hover:bg-indigo-600 text-white space-x-2"
               disabled={!isValid}
               onClick={handleCreateProfile}
             >

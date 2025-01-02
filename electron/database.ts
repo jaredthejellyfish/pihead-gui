@@ -47,7 +47,7 @@ export const addProfile = (profile: Profile): Profile => {
   const profiles = getProfiles();
   const newProfile = {
     ...profile,
-    id: Date.now(), // Simple way to generate unique IDs
+    id: crypto.randomUUID().toString(), // Simple way to generate unique IDs
     isActive: false,
   };
   profiles.push(newProfile);
@@ -67,7 +67,7 @@ export const updateProfile = (profile: Profile): Profile | null => {
 };
 
 // Delete a profile
-export const deleteProfile = (id: number): boolean => {
+export const deleteProfile = (id: string): boolean => {
   const profiles = getProfiles();
   const filteredProfiles = profiles.filter((p) => p.id !== id);
   if (filteredProfiles.length === profiles.length) return false;
@@ -77,7 +77,7 @@ export const deleteProfile = (id: number): boolean => {
 };
 
 // Set active profile
-export const setActiveProfile = (id: number): Profile | null => {
+export const setActiveProfile = (id?: string): Profile | null => {
   const profiles = getProfiles();
   const updatedProfiles = profiles.map((profile) => ({
     ...profile,

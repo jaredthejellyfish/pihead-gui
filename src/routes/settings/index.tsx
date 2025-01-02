@@ -6,7 +6,6 @@ import {
   Wifi,
   Bluetooth,
   Bell,
-  Music,
   RefreshCw,
   Info,
   Trash,
@@ -20,9 +19,31 @@ import SettingSection from "@/components/Settings/SettingSection";
 import SettingRow from "@/components/Settings/SettingRow";
 import Header from "@/components/Header";
 import { useTheme } from "@/contexts/theme-provider";
+import { useEffect, useState } from "react";
+import { useMutateProfile } from "@/hooks/useMutateProfile";
+import { useActiveProfile } from "@/contexts/active-profile-provider";
+import { DEFAULT_DISPLAY_SETTINGS, DEFAULT_GENERAL_SETTINGS } from "@/constants/defaults";
 
 export default function SettingsScreen() {
   const { theme, setTheme, lastTheme } = useTheme();
+  const { mutateProfile } = useMutateProfile();
+  const { activeProfile } = useActiveProfile();
+
+  const [settings, setSettings] = useState({
+    notifications: activeProfile?.notifications ?? DEFAULT_GENERAL_SETTINGS.notifications,
+    brightness: activeProfile?.brightness ?? DEFAULT_DISPLAY_SETTINGS.brightness,
+  });
+
+  useEffect(() => {
+    mutateProfile(settings);
+  }, [settings]);
+
+  const updateSettings = (key: keyof typeof settings, value: any) => {
+    setSettings((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
 
   return (
     <div className="h-full text-white ">
@@ -71,16 +92,15 @@ export default function SettingsScreen() {
           {/* Profile Settings */}
           <SettingSection title="Profile">
             <SettingRow icon={Bell} title="Notifications">
-              <Switch />
+              <Switch
+                name="notifications"
+                defaultChecked={settings.notifications}
+                onCheckedChange={(value) =>
+                  updateSettings("notifications", value)
+                }
+              />
             </SettingRow>
 
-            <SettingRow
-              icon={Music}
-              title="Music Services"
-              href="/settings/music-services"
-            >
-              <ChevronRight className="w-5 h-5 text-gray-500" />
-            </SettingRow>
             <SettingRow
               icon={Edit}
               title="Edit Profile"
@@ -94,7 +114,14 @@ export default function SettingsScreen() {
           <SettingSection title="Display">
             <SettingRow icon={Sun} title="Brightness">
               <div className="w-32">
-                <Slider defaultValue={[75]} max={100} step={1} />
+                <Slider
+                  max={100}
+                  step={1}
+                  onValueChange={(value) =>
+                    updateSettings("brightness", value[0])
+                  }
+                  value={[settings.brightness]}
+                />
               </div>
             </SettingRow>
             <SettingRow icon={Moon} title="Dark Mode">

@@ -5,7 +5,6 @@ import {
   SkipForward,
   SkipBack,
   Music,
-  Thermometer,
   Fuel,
   Volume2,
   User,
@@ -21,8 +20,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import VolumeControl from "@/components/VolumeControl";
-import type { Profile } from "@/types";
 import Carplay from "@/assets/carplay.svg";
+import IsOnline from "@/components/is-online";
+import ProfileIcon from "@/components/profile-icon";
 
 function QuickAccessCard({
   icon: Icon,
@@ -72,7 +72,7 @@ function WeatherWidget() {
           <div>
             <h3 className="text-gray-400 font-medium">Weather</h3>
             <div className="flex items-center space-x-2 mt-2">
-              <Cloud className="w-8 h-8 text-blue-400" />
+              <Cloud className="w-8 h-8 text-indigo-400" />
               <span className="text-3xl font-semibold text-white">72°F</span>
             </div>
             <p className="text-sm text-gray-500 mt-1">Partly Cloudy</p>
@@ -130,15 +130,7 @@ export default function HomeScreen() {
   });
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [activeProfile, setActiveProfile] = useState<Profile | null>(null);
-
   const [volumeControlOpen, setVolumeControlOpen] = useState(false);
-
-  useEffect(() => {
-    window.electron.getActiveProfile().then((profile) => {
-      setActiveProfile(profile);
-    });
-  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -185,23 +177,15 @@ export default function HomeScreen() {
           </div>
           <div className="flex justify-end items-center space-x-4">
             <Volume2
-              className="w-6 h-6 text-blue-400"
+              className="w-6 h-6 text-indigo-400"
               role="button"
               onClick={() => setVolumeControlOpen(true)}
             />
-            <Thermometer className="w-6 h-6 text-blue-400" />
-            <span className="text-xl">72°F</span>
-            <Link
-              to="/profiles"
-              className="flex items-center space-x-2 bg-white/5 backdrop-blur-lg rounded-full px-3 py-1.5"
-            >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
-                <User className="w-5 h-5" />
-              </div>
-              <span className="text-sm font-medium">
-                {activeProfile?.name ?? "Guest"}
-              </span>
+            <Link to="/settings/wifi">
+              <IsOnline />
             </Link>
+            <span className="text-xl">72°F</span>
+            <ProfileIcon />
           </div>
         </div>
 
@@ -212,7 +196,7 @@ export default function HomeScreen() {
             <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
               <CardContent className="p-6">
                 <div className="flex items-center space-x-6">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center flex-shrink-0">
                     <Music className="w-12 h-12 text-white/90" />
                   </div>
                   <div className="flex-grow">
@@ -253,7 +237,7 @@ export default function HomeScreen() {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="w-14 h-14 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors"
+                        className="w-14 h-14 rounded-full bg-indigo-500 hover:bg-indigo-600 transition-colors"
                         onClick={togglePlay}
                       >
                         {isPlaying ? (

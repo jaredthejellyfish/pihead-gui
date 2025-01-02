@@ -79,7 +79,7 @@ export default function DeleteProfilePage() {
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
             <CardContent className="p-6">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 flex items-center justify-center">
                   <User className="w-8 h-8 text-white" />
                 </div>
                 <div>

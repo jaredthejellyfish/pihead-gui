@@ -1,11 +1,11 @@
-import { Music } from "lucide-react";
+
 
 import { Car } from "lucide-react";
 
 import { User } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
+import { Theme } from "@/contexts/theme-provider";
 
-type ThemeColor = "blue" | "purple" | "green" | "orange";
 
 function ProfileCard({
   name,
@@ -16,21 +16,22 @@ function ProfileCard({
 }: {
   name: string;
   isActive: boolean;
-  theme: ThemeColor;
+  theme: Theme;
   lastTrip: string;
   onClick: () => void;
 }) {
   const gradientMap = {
-    blue: "from-blue-500 to-blue-600",
+    blue: "from-indigo-500 to-indigo-600",
     purple: "from-purple-500 to-purple-600",
     green: "from-green-500 to-green-600",
     orange: "from-orange-500 to-orange-600",
+    dark: "from-black to-black/50"
   };
 
   return (
     <Card
       className={`bg-white/5 border-0 backdrop-blur-lg overflow-hidden cursor-pointer transition-all duration-300 ${
-        isActive ? "ring-2 ring-blue-500 bg-white/10" : "hover:bg-white/10"
+        isActive ? "ring-2 ring-indigo-500 bg-white/10" : "hover:bg-white/10"
       }`}
       onClick={onClick}
     >
@@ -45,7 +46,7 @@ function ProfileCard({
             <div className="flex items-center justify-between">
               <h3 className="text-2xl font-semibold text-white">{name}</h3>
               {isActive && (
-                <span className="text-sm text-blue-400 bg-blue-500/20 px-3 py-1 rounded-full">
+                <span className="text-sm text-indigo-400 bg-indigo-500/20 px-3 py-1 rounded-full">
                   Active
                 </span>
               )}

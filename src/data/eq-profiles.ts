@@ -1,13 +1,24 @@
-export interface EQProfile {
-  id: string;
-  name: string;
-  description: string;
-  bands: {
-    [frequency: string]: number; // frequency in Hz, value in dB
-  };
-}
+import type { Bands } from "@/types";
 
-export const eqProfiles: EQProfile[] = [
+export const defaultEQProfile: Bands = {
+  id: "flat",
+  name: "Flat",
+  description: "Neutral frequency response with no adjustments",
+  bands: {
+    "60": 0,
+    "170": 0,
+    "310": 0,
+    "600": 0,
+    "1000": 0,
+    "3000": 0,
+    "6000": 0,
+    "12000": 0,
+    "14000": 0,
+    "16000": 0,
+  },
+};
+
+export const eqProfiles: Bands[] = [
   {
     id: "flat",
     name: "Flat",

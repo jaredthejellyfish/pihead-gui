@@ -60,7 +60,7 @@ export default function HorizontalNowPlayingCard() {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
+              <div className="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                 <Music className="w-10 h-10 text-white/90" />
               </div>
             )}
@@ -104,7 +104,7 @@ export default function HorizontalNowPlayingCard() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="w-10 h-10 rounded-full bg-blue-500 hover:bg-blue-600 text-white"
+                  className="w-10 h-10 rounded-full bg-indigo-500 hover:bg-indigo-600 text-white"
                   onClick={togglePlay}
                 >
                   {isPlaying ? (

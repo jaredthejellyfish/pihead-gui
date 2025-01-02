@@ -43,8 +43,8 @@ const NetworkCard = ({
       <CardContent className="p-4" onClick={onClick}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-              <Wifi className="w-5 h-5 text-blue-400" />
+            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center">
+              <Wifi className="w-5 h-5 text-indigo-400" />
             </div>
             <div>
               <p className="text-white font-medium">{network}</p>
@@ -137,11 +137,11 @@ export default function WiFiSettingsPage() {
                   <div className="flex items-center space-x-4">
                     <div
                       className={`w-10 h-10 rounded-xl ${
-                        isWifiEnabled ? "bg-blue-500/20" : "bg-gray-500/20"
+                        isWifiEnabled ? "bg-indigo-500/20" : "bg-gray-500/20"
                       } flex items-center justify-center`}
                     >
                       {isWifiEnabled ? (
-                        <Wifi className="w-6 h-6 text-blue-400" />
+                        <Wifi className="w-6 h-6 text-indigo-400" />
                       ) : (
                         <WifiOff className="w-6 h-6 text-gray-400" />
                       )}

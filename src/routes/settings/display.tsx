@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Sun,
   Moon,
@@ -21,19 +21,38 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 import SettingRow from "@/components/Settings/SettingRow";
 import ThemeSelection from "@/components/Settings/ThemeSelector";
+import { useTheme } from "@/contexts/theme-provider";
+import { useMutateProfile } from "@/hooks/useMutateProfile";
+import { useActiveProfile } from "@/contexts/active-profile-provider";
+import { DEFAULT_DISPLAY_SETTINGS } from "@/constants/defaults";
 
 export default function DisplaySettingsPage() {
-  const [brightness, setBrightness] = useState([75]);
-  const [autoBrightness, setAutoBrightness] = useState(true);
-  const [nightMode, setNightMode] = useState(false);
-  const [autoNightMode, setAutoNightMode] = useState(true);
-  const [screenTimeout, setScreenTimeout] = useState([5]); // minutes when parked
-  const [reverseCamera, setReverseCamera] = useState(true);
-  const [glareReduction, setGlareReduction] = useState(true);
-  const [theme, setTheme] = useState("purple");
+  const { mutateProfile } = useMutateProfile();
+  const { activeProfile } = useActiveProfile();
+  const { theme } = useTheme();
+
+  const [settings, setSettings] = useState({
+    brightness: activeProfile?.brightness ?? DEFAULT_DISPLAY_SETTINGS.brightness,
+    autoBrightness: activeProfile?.autoBrightness ?? DEFAULT_DISPLAY_SETTINGS.autoBrightness,
+    autoNightMode: activeProfile?.autoNightMode ?? DEFAULT_DISPLAY_SETTINGS.autoNightMode,
+    screenTimeout: activeProfile?.screenTimeout ?? DEFAULT_DISPLAY_SETTINGS.screenTimeout,
+    reverseCamera: activeProfile?.reverseCamera ?? DEFAULT_DISPLAY_SETTINGS.reverseCamera,
+    glareReduction: activeProfile?.glareReduction ?? DEFAULT_DISPLAY_SETTINGS.glareReduction,
+    standbyDisplay: activeProfile?.standbyDisplay ?? DEFAULT_DISPLAY_SETTINGS.standbyDisplay,
+    theme: theme ?? DEFAULT_DISPLAY_SETTINGS.theme,
+  });
+
+  useEffect(() => {
+    mutateProfile(settings);
+  }, [settings]);
+
+  const [standbyMode, setStandbyMode] = useState("minimal");
+
+  const updateSetting = (key: keyof typeof settings, value: any) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+  };
 
   return (
     <div className="h-full text-white overflow-scroll ">
@@ -55,12 +74,14 @@ export default function DisplaySettingsPage() {
                 subtitle="Adjust based on ambient light sensor"
               >
                 <Switch
-                  checked={autoBrightness}
-                  onCheckedChange={setAutoBrightness}
+                  checked={settings.autoBrightness}
+                  onCheckedChange={(value) =>
+                    updateSetting("autoBrightness", value)
+                  }
                 />
               </SettingRow>
 
-              {!autoBrightness && (
+              {!settings.autoBrightness && (
                 <SettingRow
                   icon={Sun}
                   title="Brightness"
@@ -68,14 +89,16 @@ export default function DisplaySettingsPage() {
                 >
                   <div className="w-48">
                     <Slider
-                      value={brightness}
-                      onValueChange={setBrightness}
+                      value={[settings.brightness]}
+                      onValueChange={(value) =>
+                        updateSetting("brightness", value[0])
+                      }
                       max={100}
                       step={1}
                     />
                   </div>
                   <span className="w-12 text-right text-gray-400">
-                    {brightness}%
+                    {settings.brightness}%
                   </span>
                 </SettingRow>
               )}
@@ -83,7 +106,11 @@ export default function DisplaySettingsPage() {
           </Card>
 
           {/* Theme Selection */}
-          <ThemeSelection />
+          <ThemeSelection
+            onThemeChange={(theme) => {
+              updateSetting("theme", theme);
+            }}
+          />
 
           {/* Day/Night Mode */}
           <Card className="bg-white/5 border-0 backdrop-blur-lg overflow-hidden">
@@ -94,20 +121,12 @@ export default function DisplaySettingsPage() {
                 subtitle="Switch automatically based on time and location"
               >
                 <Switch
-                  checked={autoNightMode}
-                  onCheckedChange={setAutoNightMode}
+                  checked={settings.autoNightMode}
+                  onCheckedChange={(value) =>
+                    updateSetting("autoNightMode", value)
+                  }
                 />
               </SettingRow>
-
-              {!autoNightMode && (
-                <SettingRow
-                  icon={Lightbulb}
-                  title="Night Mode"
-                  subtitle="Reduce brightness for night driving"
-                >
-                  <Switch checked={nightMode} onCheckedChange={setNightMode} />
-                </SettingRow>
-              )}
 
               <SettingRow
                 icon={AlertTriangle}
@@ -115,8 +134,10 @@ export default function DisplaySettingsPage() {
                 subtitle="Reduce screen glare during bright conditions"
               >
                 <Switch
-                  checked={glareReduction}
-                  onCheckedChange={setGlareReduction}
+                  checked={settings.glareReduction}
+                  onCheckedChange={(value) =>
+                    updateSetting("glareReduction", value)
+                  }
                 />
               </SettingRow>
             </CardContent>
@@ -132,15 +153,17 @@ export default function DisplaySettingsPage() {
               >
                 <div className="w-48">
                   <Slider
-                    value={screenTimeout}
-                    onValueChange={setScreenTimeout}
+                    value={[settings.screenTimeout]}
+                    onValueChange={(value) =>
+                      updateSetting("screenTimeout", value[0])
+                    }
                     min={1}
                     max={30}
                     step={1}
                   />
                 </div>
                 <span className="w-16 text-right text-gray-400">
-                  {screenTimeout}m
+                  {settings.screenTimeout}m
                 </span>
               </SettingRow>
 
@@ -150,8 +173,10 @@ export default function DisplaySettingsPage() {
                 subtitle="Auto-switch to camera when in reverse"
               >
                 <Switch
-                  checked={reverseCamera}
-                  onCheckedChange={setReverseCamera}
+                  checked={settings.reverseCamera}
+                  onCheckedChange={(value) =>
+                    updateSetting("reverseCamera", value)
+                  }
                 />
               </SettingRow>
 
@@ -160,41 +185,56 @@ export default function DisplaySettingsPage() {
                 title="Standby Display"
                 subtitle="Show basic info while car is off"
               >
-                <Select>
-                  <SelectTrigger className="bg-white/10 border-0 rounded-lg text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500">
-                    <SelectValue placeholder="Select" />
-                  </SelectTrigger>
-                  <SelectContent
-                    className="bg-gray-900/95 border-gray-800 text-white"
-                    side="top"
-                  >
-                    <SelectItem
-                      value="off"
-                      className="focus:bg-white/10 focus:text-white"
-                    >
-                      Off
-                    </SelectItem>
-                    <SelectItem
-                      value="clock"
-                      className="focus:bg-white/10 focus:text-white"
-                    >
-                      Clock Only
-                    </SelectItem>
-                    <SelectItem
-                      value="minimal"
-                      className="focus:bg-white/10 focus:text-white"
-                    >
-                      Clock + Temperature
-                    </SelectItem>
-                    <SelectItem
-                      value="full"
-                      className="focus:bg-white/10 focus:text-white"
-                    >
-                      Full Info
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <Switch
+                  checked={settings.standbyDisplay}
+                  onCheckedChange={(value) =>
+                    updateSetting("standbyDisplay", value)
+                  }
+                />
               </SettingRow>
+
+              {settings.standbyDisplay && (
+                <SettingRow
+                  icon={Lightbulb}
+                  title="Standby Mode"
+                  subtitle="Choose what information to display"
+                >
+                  <Select value={standbyMode} onValueChange={setStandbyMode}>
+                    <SelectTrigger className="bg-white/10 border-0 rounded-lg text-white px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500">
+                      <SelectValue placeholder="Select" />
+                    </SelectTrigger>
+                    <SelectContent
+                      className="bg-gray-900/95 border-gray-800 text-white"
+                      side="top"
+                    >
+                      <SelectItem
+                        value={"false"}
+                        className="focus:bg-white/10 focus:text-white"
+                      >
+                        Off
+                      </SelectItem>
+                      <SelectItem
+                        value="clock"
+                        className="focus:bg-white/10 focus:text-white"
+                      >
+                        Clock Only
+                      </SelectItem>
+                      <SelectItem
+                        value="minimal"
+                        className="focus:bg-white/10 focus:text-white"
+                      >
+                        Clock + Temperature
+                      </SelectItem>
+                      <SelectItem
+                        value="full"
+                        className="focus:bg-white/10 focus:text-white"
+                      >
+                        Full Info
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </SettingRow>
+              )}
             </CardContent>
           </Card>
         </div>

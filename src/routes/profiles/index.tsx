@@ -5,10 +5,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import Header from "@/components/Header";
 import ProfileCard from "@/components/Profiles/ProfileCard";
 import type { Profile } from "@/types";
+import { useTheme } from "@/contexts/theme-provider";
+import { useActiveProfile } from "@/contexts/active-profile-provider";
 
 export default function ProfilesScreen() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
-  const [activeProfile, setActiveProfile] = useState<number | null>(null);
+  const { setTheme } = useTheme();
+  const { setActiveProfileById, activeProfile, refetch } = useActiveProfile();
 
   // Fetch profiles on component mount
   useEffect(() => {
@@ -19,7 +22,7 @@ export default function ProfilesScreen() {
         // Set active profile if one exists
         const active = fetchedProfiles.find((p) => p.isActive);
         if (active?.id) {
-          setActiveProfile(active.id);
+          setActiveProfileById(active.id);
         }
       } catch (error) {
         console.error("Error fetching profiles:", error);
@@ -29,14 +32,17 @@ export default function ProfilesScreen() {
     fetchProfiles();
   }, []);
 
-  const handleProfileClick = async (id: number) => {
+  const handleProfileClick = async (id?: string) => {
     try {
       const updatedProfile = await window.electron.setActiveProfile(id);
       if (updatedProfile) {
+        setTheme(updatedProfile.theme);
         // Refresh profiles to get updated active states
         const updatedProfiles = await window.electron.getProfiles();
         setProfiles(updatedProfiles);
-        setActiveProfile(id);
+        setActiveProfileById(id);
+
+        refetch();
       }
     } catch (error) {
       console.error("Error activating profile:", error);
@@ -63,7 +69,7 @@ export default function ProfilesScreen() {
               theme={profile.theme}
               lastTrip={profile.lastTrip || "No trips yet"}
               onClick={() => profile.id && handleProfileClick(profile.id)}
-              isActive={profile.id === activeProfile}
+              isActive={profile.id === activeProfile?.id}
             />
           ))}
 

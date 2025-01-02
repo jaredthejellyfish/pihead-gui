@@ -1,15 +1,23 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
-import { Button } from "@/components/ui/button";
-import Header from "@/components/Header";
-import { Settings, Car } from "lucide-react";
-import { eqProfiles } from "@/data/eq-profiles";
-import { cn } from "@/lib/utils";
 
-const BalanceControl = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+import Header from "@/components/Header";
+import { Car } from "lucide-react";
+import { eqProfiles, defaultEQProfile } from "@/data/eq-profiles";
+import { cn } from "@/lib/utils";
+import { useActiveProfile } from "@/contexts/active-profile-provider";
+import { useMutateProfile } from "@/hooks/useMutateProfile";
+import type { Bands } from "@/types";
+
+const BalanceControl = ({
+  onChange,
+  position,
+}: {
+  onChange: (position: { x: number; y: number }) => void;
+  position: { x: number; y: number };
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
 
@@ -32,7 +40,7 @@ const BalanceControl = () => {
     x = Math.round(x / 5) * 5;
     y = Math.round(y / 5) * 5;
 
-    setPosition({ x, y });
+    onChange({ x, y });
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -52,7 +60,7 @@ const BalanceControl = () => {
 
   // Reset position on double click
   const handleDoubleClick = () => {
-    setPosition({ x: 0, y: 0 });
+    onChange({ x: 0, y: 0 });
   };
 
   return (
@@ -103,11 +111,11 @@ const BalanceControl = () => {
       <div
         className={cn(
           "absolute w-4 h-4 -translate-x-1/2 -translate-y-1/2 transition-transform",
-          "bg-gradient-to-br from-blue-400 to-blue-500",
-          "rounded-full shadow-lg shadow-blue-500/20",
+          "bg-gradient-to-br from-indigo-400 to-indigo-500",
+          "rounded-full shadow-lg shadow-indigo-500/20",
           "border border-white/20",
           "cursor-grab active:cursor-grabbing",
-          "transform hover:scale-110 active:scale-95",
+          "transform hover:scale-110 active:scale-95"
         )}
         style={{
           left: `${50 + (position.x / 100) * 50}%`,
@@ -138,17 +146,15 @@ const EqualizerBand = ({
   onChange,
 }: {
   frequency: string;
-  value: number[];
-  onChange: (value: number[]) => void;
+  value: number;
+  onChange: (value: number) => void;
 }) => (
   <div className="flex flex-col items-center space-y-2 flex-1">
     <div className="relative h-48 flex items-center">
-      {/* Track line */}
       <div className="absolute left-1/2 w-[1px] h-full bg-white/20 -translate-x-[0.5px]" />
-
       <Slider
-        value={value}
-        onValueChange={onChange}
+        value={[value]}
+        onValueChange={(v) => onChange(v[0])}
         max={12}
         min={-12}
         step={1}
@@ -159,35 +165,58 @@ const EqualizerBand = ({
     <div className="flex flex-col items-center text-center">
       <span className="text-gray-400 text-xs">{frequency}</span>
       <span className="text-gray-500 text-xs">
-        {value[0] > 0 ? "+" : ""}
-        {value[0]}dB
+        {value > 0 ? "+" : ""}
+        {value}dB
       </span>
     </div>
   </div>
 );
 
 export default function SoundSettingsPage() {
+  const { activeProfile } = useActiveProfile();
+  const { mutateProfile } = useMutateProfile();
+  const [balance, setBalance] = useState(activeProfile?.balance ?? { x: 0, y: 0 });
+
   const [enhancementToggles, setEnhancementToggles] = useState({
-    loudness: true,
-    surround: false,
-    dynamicEQ: true,
-    roadNoiseCompensation: true,
+    loudness: activeProfile?.loudness ?? true,
+    surround: activeProfile?.surround ?? false,
+    dynamicEQ: activeProfile?.dynamicEQ ?? true,
+    roadNoiseCompensation: activeProfile?.roadNoiseCompensation ?? true,
   });
 
-  const [eqProfile, setEqProfile] = useState<string>("");
+  const [eqProfile, setEqProfile] = useState<string>(
+    activeProfile?.eqBands?.id ?? "custom"
+  );
 
-  const [eqBands, setEqBands] = useState({
-    "60Hz": [0],
-    "170Hz": [0],
-    "310Hz": [0],
-    "600Hz": [0],
-    "1k": [0],
-    "3k": [0],
-    "6k": [0],
-    "12k": [0],
-    "14k": [0],
-    "16k": [0],
-  });
+  const [eqBands, setEqBands] = useState<Bands["bands"]>(
+    activeProfile?.eqBands?.bands ?? defaultEQProfile.bands
+  );
+
+  useEffect(() => {
+    if (!activeProfile) return;
+
+    mutateProfile({
+      ...activeProfile,
+      loudness: enhancementToggles.loudness,
+      surround: enhancementToggles.surround,
+      dynamicEQ: enhancementToggles.dynamicEQ,
+      roadNoiseCompensation: enhancementToggles.roadNoiseCompensation,
+      balance: balance,
+      eqBands: {
+        id: activeProfile?.eqBands?.id ?? "custom",
+        name: activeProfile?.eqBands?.name ?? "Custom",
+        description:
+          activeProfile?.eqBands?.description ?? "Custom equalizer settings",
+        bands: eqBands,
+      },
+    });
+  }, [eqBands, mutateProfile, activeProfile, balance, enhancementToggles]);
+
+  // Helper function to format frequency for display
+  const formatFrequency = (freq: string) => {
+    const numFreq = Number.parseInt(freq);
+    return numFreq >= 1000 ? `${numFreq / 1000}k` : `${numFreq}Hz`;
+  };
 
   return (
     <div className="h-full text-white overflow-scroll ">
@@ -206,7 +235,7 @@ export default function SoundSettingsPage() {
               <h3 className="text-lg font-medium text-white mb-4">
                 Speaker Balance
               </h3>
-              <BalanceControl />
+              <BalanceControl onChange={setBalance} position={balance} />
             </CardContent>
           </Card>
 
@@ -220,23 +249,23 @@ export default function SoundSettingsPage() {
                   onChange={(e) => {
                     setEqProfile(e.target.value);
                     const selectedProfile = eqProfiles.find(
-                      (p) => p.id === e.target.value,
+                      (p) => p.id === e.target.value
                     );
                     if (selectedProfile) {
                       const newBands = Object.fromEntries(
                         Object.entries(selectedProfile.bands).map(
                           ([freq, value]) => [
                             freq.includes("000")
-                              ? `${parseInt(freq) / 1000}k`
+                              ? `${Number.parseInt(freq) / 1000}k`
                               : `${freq}Hz`,
-                            [value],
-                          ],
-                        ),
+                            value,
+                          ]
+                        )
                       ) as typeof eqBands;
                       setEqBands(newBands);
                     }
                   }}
-                  className="bg-white/10 border-0 rounded-lg text-white px-3 py-2 outline-none focus:ring-2 focus:ring-blue-500"
+                  className="bg-white/10 border-0 rounded-lg text-white px-3 py-2 outline-none focus:ring-2 focus:ring-indigo-500"
                 >
                   {eqProfiles.map((profile) => (
                     <option key={profile.id} value={profile.id}>
@@ -249,7 +278,7 @@ export default function SoundSettingsPage() {
                 {Object.entries(eqBands).map(([freq, value]) => (
                   <EqualizerBand
                     key={freq}
-                    frequency={freq}
+                    frequency={formatFrequency(freq)}
                     value={value}
                     onChange={(v) => setEqBands({ ...eqBands, [freq]: v })}
                   />
@@ -285,13 +314,6 @@ export default function SoundSettingsPage() {
                         </p>
                       </div>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="hover:bg-white/10"
-                    >
-                      <Settings className="w-4 h-4 text-white/80" />
-                    </Button>
                   </div>
                 ))}
               </div>
