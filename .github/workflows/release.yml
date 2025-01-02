@@ -79,8 +79,9 @@ jobs:
         with:
           name: ${{ matrix.os }}-artifacts
           path: |
-            release/
-            
+            release/**/*.dmg
+            release/**/*.AppImage
+
   create-release:
     needs: release
     runs-on: ubuntu-latest
@@ -136,7 +137,9 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          files: artifacts/**/*
+          files: |
+            artifacts/**/*.dmg
+            artifacts/**/*.AppImage
           body: ${{steps.changelog.outputs.changelog}}
           draft: false
           prerelease: false
