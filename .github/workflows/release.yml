@@ -62,7 +62,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun run electron-builder --linux --arm64 --publish always
+        run: bun run electron-builder --linux --arm64 --publish never
 
       # Upload artifacts for debugging
       - name: Upload artifacts
