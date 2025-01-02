@@ -35,7 +35,7 @@
     {
       provider: "github",
       owner: "jaredthejellyfish",
-      repo: "pihead",
+      repo: "pihead-gui",
     },
   ],
 }
