@@ -2,8 +2,6 @@
 
 A modern, feature-rich vehicle head unit interface built with Electron and React. PiHead GUI provides a sleek, customizable dashboard for your vehicle's entertainment and control systems.
 
-![PiHead GUI](public/electron-vite.svg)
-
 ## Features
 
 ### 🎵 Audio Control
