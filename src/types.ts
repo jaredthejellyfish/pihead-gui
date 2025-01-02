@@ -51,3 +51,29 @@ export type Bands =   {
     "16000": number,
   },
 }
+
+export type AppData = {
+  appVersion: string;
+  diskStorage: {
+    free: number;
+    total: number;
+    used: number;
+  };
+  deviceName: string;
+  macAddresses: {
+    wifi: string | null;
+    bluetooth: string | null;
+  };
+};
+
+export type UpdateData = {
+  updateAvailable: boolean;
+  version: string;
+  changelog: string;
+  date: string;
+  size: string;
+  title: string;
+  status: string;
+  progress?: number;
+  notes: string[];
+};

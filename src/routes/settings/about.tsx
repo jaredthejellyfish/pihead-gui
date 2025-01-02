@@ -14,9 +14,11 @@ import {
   AlertTriangle,
   Car,
   type LucideIcon,
+  Cpu,
 } from "lucide-react";
 import { useMutateProfile } from "@/hooks/useMutateProfile";
 import { defaultEQProfile } from "@/data/eq-profiles";
+import type { AppData } from "@/types";
 
 const InfoRow = ({
   icon: Icon,
@@ -49,18 +51,7 @@ const InfoRow = ({
   </button>
 );
 
-type AppData = {
-  appVersion: string;
-  diskStorage: {
-    free: number;
-    total: number;
-    used: number;
-  };
-  macAddresses: {
-    wifi: string | null;
-    bluetooth: string | null;
-  };
-};
+
 
 export default function AboutPage() {
   const [diagRunning, setDiagRunning] = useState(false);
@@ -72,11 +63,13 @@ export default function AboutPage() {
       total: 0,
       used: 0,
     },
+    deviceName: "",
     macAddresses: {
       wifi: null,
       bluetooth: null,
     },
   });
+
 
   const runDiagnostics = () => {
     setDiagRunning(true);
@@ -87,9 +80,11 @@ export default function AboutPage() {
     const version = await window.electron.getAppVersion();
     const diskStorage = await window.electron.getDiskStorage();
     const macAddresses = await window.electron.getMacAddresses();
+    const deviceName = await window.electron.getDeviceName();
     setAppData({
       appVersion: version,
       diskStorage,
+      deviceName,
       macAddresses,
     });
   }, []);
@@ -155,6 +150,11 @@ export default function AboutPage() {
                   icon={Radio}
                   label="Software Version"
                   value={appData.appVersion}
+                />
+                <InfoRow
+                  icon={Cpu}
+                  label="Device Name"
+                  value={appData.deviceName}
                 />
                 <InfoRow
                   icon={HardDrive}

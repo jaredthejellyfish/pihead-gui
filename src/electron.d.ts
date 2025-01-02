@@ -1,7 +1,7 @@
 /* eslint-disable */
 /* @typescript-eslint-disable */
 
-import type { Profile, DiskStorage } from "./types";
+import type { Profile, DiskStorage, UpdateData } from "./types";
 
 export interface IElectronAPI {
   ipcRenderer: {
@@ -33,7 +33,13 @@ declare global {
       getActiveProfile: () => Promise<Profile | null>;
       getAppVersion: () => Promise<string>;
       getDiskStorage: () => Promise<DiskStorage>;
-      getMacAddresses: () => Promise<{ wifi: string | null; bluetooth: string | null }>;
+      getMacAddresses: () => Promise<{
+        wifi: string | null;
+        bluetooth: string | null;
+      }>;
+      getDeviceName: () => Promise<string>;
+      checkForUpdates: () => Promise<UpdateData>;
+      performUpdate: () => Promise<{ success: boolean; error?: string }>;
     };
   }
 }

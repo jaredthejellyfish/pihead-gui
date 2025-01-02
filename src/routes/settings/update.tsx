@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -16,6 +16,7 @@ import {
   AlertCircle,
   type LucideIcon,
 } from "lucide-react";
+import type { AppData, UpdateData } from "@/types";
 
 const SystemInfoRow = ({
   icon: Icon,
@@ -57,7 +58,7 @@ const UpdateCard = ({
   version,
   size,
   date,
-  status,
+
   progress,
   notes,
 }: {
@@ -65,7 +66,7 @@ const UpdateCard = ({
   version: string;
   size: string;
   date: string;
-  status: "available" | "downloading" | "ready" | "installed" | "failed";
+
   progress?: number;
   notes: string[];
 }) => {
@@ -170,17 +171,6 @@ const UpdateCard = ({
               ))}
             </ul>
           </div>
-
-          {(status === "available" || status === "ready") && (
-            <div className="flex space-x-3">
-              <Button className="bg-indigo-500 hover:bg-indigo-600 text-white">
-                {status === "available" ? "Download Now" : "Install Now"}
-              </Button>
-              <Button variant="ghost" className="bg-white/5 hover:bg-white/10">
-                Release Notes
-              </Button>
-            </div>
-          )}
         </div>
       </CardContent>
     </Card>
@@ -189,6 +179,50 @@ const UpdateCard = ({
 
 export default function SoftwareUpdatePage() {
   const [checkingUpdates, setCheckingUpdates] = useState(false);
+  const [appData, setAppData] = useState<Partial<AppData>>({
+    appVersion: "",
+    deviceName: "",
+    diskStorage: {
+      total: 0,
+      used: 0,
+      free: 0,
+    },
+  });
+
+  const [updateData, setUpdateData] = useState<Partial<UpdateData>>({
+    updateAvailable: false,
+    version: "",
+    changelog: "",
+    date: "",
+    size: "",
+    title: "",
+    status: "",
+    progress: 0,
+    notes: [],
+  });
+
+  const getAppData = useCallback(async () => {
+    const version = await window.electron.getAppVersion();
+    const diskStorage = await window.electron.getDiskStorage();
+    const deviceName = await window.electron.getDeviceName();
+    setAppData({
+      appVersion: version,
+      diskStorage,
+      deviceName,
+    });
+  }, []);
+
+  const checkForUpdates = async () => {
+    setCheckingUpdates(true);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    const result = await window.electron.checkForUpdates();
+    setUpdateData(result);
+    setCheckingUpdates(false);
+  };
+
+  useEffect(() => {
+    getAppData();
+  }, [getAppData]);
 
   return (
     <div className="h-full text-white overflow-scroll ">
@@ -210,11 +244,9 @@ export default function SoftwareUpdatePage() {
                 </h3>
                 <Button
                   variant="ghost"
-                  className="bg-white/5 hover:bg-white/10"
-                  onClick={() => {
-                    setCheckingUpdates(true);
-                    setTimeout(() => setCheckingUpdates(false), 2000);
-                  }}
+                  className="bg-white/5 hover:bg-white/10 text-white"
+                  onClick={async () => await checkForUpdates()}
+                  disabled={checkingUpdates}
                 >
                   <RefreshCw
                     className={`w-4 h-4 mr-2 ${
@@ -228,38 +260,32 @@ export default function SoftwareUpdatePage() {
                 <SystemInfoRow
                   icon={Radio}
                   label="Current Version"
-                  value="2.1.0 (Build 2024.03.15)"
+                  value={appData.appVersion ?? ""}
                 />
                 <SystemInfoRow
                   icon={Cpu}
                   label="System Type"
-                  value="Raspberry Pi 4b"
+                  value={appData.deviceName ?? "N/A"}
                 />
                 <SystemInfoRow
                   icon={HardDrive}
                   label="Storage Available"
-                  value="13.2 GB"
+                  value={`${appData.diskStorage?.free} GB`}
                   status="warning"
                 />
               </div>
             </CardContent>
           </Card>
 
-          {/* Available Update */}
-          <UpdateCard
-            title="System Update"
-            version="2.2.0"
-            size="842 MB"
-            date="March 30, 2024"
-            status="available"
-            notes={[
-              "Enhanced navigation performance",
-              "New music streaming features",
-              "Improved voice recognition accuracy",
-              "Bug fixes and stability improvements",
-              "Updated CarPlay and Android Auto integration",
-            ]}
-          />
+          {updateData.updateAvailable && (
+            <UpdateCard
+              title={updateData.title ?? "System Update"}
+              version={updateData.version ?? "2.2.0"}
+              size={updateData.size ?? "842 MB"}
+              date={updateData.date ?? "March 30, 2024"}
+              notes={updateData.notes ?? []}
+            />
+          )}
 
           {/* Warning Card */}
           <Card className="bg-orange-500/20 border-0 backdrop-blur-lg overflow-hidden">
@@ -272,7 +298,7 @@ export default function SoftwareUpdatePage() {
                   </p>
                   <p className="text-sm text-orange-200/80 mt-1">
                     Vehicle must be in park with the engine running during
-                    software updates. Updates typically take 20-30 minutes to
+                    software updates. Updates typically take 1-2 minutes to
                     complete.
                   </p>
                 </div>

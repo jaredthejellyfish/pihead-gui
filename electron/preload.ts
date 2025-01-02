@@ -23,4 +23,7 @@ contextBridge.exposeInMainWorld("electron", {
   getAppVersion: () => ipcRenderer.invoke("get-app-version"),
   getDiskStorage: () => ipcRenderer.invoke("get-disk-storage"),
   getMacAddresses: () => ipcRenderer.invoke("get-mac-addresses"),
+  getDeviceName: () => ipcRenderer.invoke("get-device-name"),
+  checkForUpdates: () => ipcRenderer.invoke("check-for-updates"),
+  performUpdate: () => ipcRenderer.invoke("perform-update"),
 });
