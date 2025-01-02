@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           bun install
-          bun pm trust
+          bun pm trust --all
 
       # Linux ARM-specific setup
       - name: Setup Linux ARM build environment
