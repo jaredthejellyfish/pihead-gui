@@ -8,7 +8,7 @@ on:
 jobs:
   release:
     runs-on: ${{ matrix.os }}
-    continue-on-error: true  # This allows other jobs to continue if one fails
+    continue-on-error: true
 
     strategy:
       matrix:
@@ -17,11 +17,13 @@ jobs:
           - os: ubuntu-latest
             platform: linux
             arch: arm64
-      fail-fast: false  # This ensures that all matrix jobs run even if one fails
+      fail-fast: false
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -57,7 +59,7 @@ jobs:
           bun run tsc
           bun run vite build
 
-     # macOS build
+      # macOS build
       - name: Build macOS
         if: matrix.os == 'macos-latest'
         env:
@@ -71,10 +73,72 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun run electron-builder --linux --arm64 --publish never
 
-      # Upload artifacts for debugging
+      # Upload artifacts for release
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.os }}-artifacts
           path: |
             release/
+            
+  create-release:
+    needs: release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          
+      - name: Generate changelog
+        id: changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configuration: |
+            {
+              "categories": [
+                {
+                  "title": "## 🚀 Features",
+                  "pattern": "^feat.*"
+                },
+                {
+                  "title": "## 🐛 Fixes",
+                  "pattern": "^fix.*"
+                },
+                {
+                  "title": "## 🏗️ Changes",
+                  "pattern": "^refactor.*"
+                },
+                {
+                  "title": "## 📦 Dependencies",
+                  "pattern": "^deps.*"
+                },
+                {
+                  "title": "## 💬 Other",
+                  "pattern": "^.*"
+                }
+              ],
+              "template": "#{{CHANGELOG}}\n\n<details>\n<summary>Uncategorized</summary>\n\n#{{UNCATEGORIZED}}\n</details>",
+              "commit_template": "- {{message}}",
+              "empty_template": "- no changes",
+              "trim_values": true
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: artifacts/**/*
+          body: ${{steps.changelog.outputs.changelog}}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
