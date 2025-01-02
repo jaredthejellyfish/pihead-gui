@@ -36,7 +36,7 @@ export default function SettingsScreen() {
 
   useEffect(() => {
     mutateProfile(settings);
-  }, [settings]);
+  }, [settings, mutateProfile]);
 
   const updateSettings = (key: keyof typeof settings, value: any) => {
     setSettings((prev) => ({
