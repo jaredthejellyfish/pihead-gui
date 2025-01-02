@@ -8,6 +8,7 @@ on:
 jobs:
   release:
     runs-on: ${{ matrix.os }}
+    continue-on-error: true  # This allows other jobs to continue if one fails
 
     strategy:
       matrix:
@@ -16,6 +17,7 @@ jobs:
           - os: ubuntu-latest
             platform: linux
             arch: arm64
+      fail-fast: false  # This ensures that all matrix jobs run even if one fails
 
     steps:
       - name: Checkout code
@@ -75,5 +77,4 @@ jobs:
         with:
           name: ${{ matrix.os }}-artifacts
           path: |
-            dist/
             release/
