@@ -2,6 +2,19 @@
   "name": "pihead-gui",
   "version": "0.0.0",
   "private": true,
+  "homepage": "https://github.com/jaredthejellyfish/pihead-gui#readme",
+  "bugs": {
+    "url": "https://github.com/jaredthejellyfish/pihead-gui/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jaredthejellyfish/pihead-gui.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Jared Hernandez",
+    "url": "https://github.com/jaredthejellyfish"
+  },
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
