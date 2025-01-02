@@ -167,6 +167,7 @@ export default function BluetoothSettingsPage() {
     },
   ]);
 
+  // @ts-expect-error -- not implemented
   const [availableDevices, setAvailableDevices] = useState<BluetoothDevice[]>([
     {
       id: "5",

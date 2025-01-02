@@ -7,7 +7,6 @@ import {
   Music,
   Fuel,
   Volume2,
-  User,
   Battery,
   Cloud,
   Wind,
@@ -123,6 +122,7 @@ function VehicleStatusWidget() {
 
 export default function HomeScreen() {
   const [currentTime, setCurrentTime] = useState(new Date());
+  // @ts-expect-error -- not implemented
   const [currentSong, setCurrentSong] = useState({
     title: "Starlight",
     artist: "Muse",

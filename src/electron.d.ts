@@ -22,7 +22,7 @@ declare global {
       getProfiles: () => Promise<Profile[]>;
       addProfile: (profile: Profile) => Promise<Profile>;
       updateProfile: (profile: Profile) => Promise<Profile | null>;
-      deleteProfile: (id: number) => Promise<boolean>;
+      deleteProfile: (id: string) => Promise<boolean>;
       setActiveProfile: (id?: string) => Promise<Profile | null>;
       getVolume: () => Promise<number>;
       setVolume: (volume: number) => Promise<void>;

@@ -7,7 +7,6 @@ import {
   Wifi,
   WifiOff,
   Lock,
-  Signal,
   Plus,
   RefreshCw,
   Check,
@@ -67,6 +66,7 @@ const NetworkCard = ({
 export default function WiFiSettingsPage() {
   const [isWifiEnabled, setIsWifiEnabled] = useState(true);
   const [isAPMode, setIsAPMode] = useState(false);
+  // @ts-expect-error -- not implemented
   const [networks, setNetworks] = useState([
     {
       id: 1,

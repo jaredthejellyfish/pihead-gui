@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld("electron", {
   addProfile: (profile: Profile) => ipcRenderer.invoke("add-profile", profile),
   updateProfile: (profile: Profile) =>
     ipcRenderer.invoke("update-profile", profile),
-  deleteProfile: (id: number) => ipcRenderer.invoke("delete-profile", id),
+  deleteProfile: (id: string) => ipcRenderer.invoke("delete-profile", id),
   setActiveProfile: (id?: string) =>
     ipcRenderer.invoke("set-active-profile", id),
   getVolume: () => ipcRenderer.invoke("get-volume"),

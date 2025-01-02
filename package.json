@@ -22,7 +22,6 @@
     "better-sqlite3": "^11.7.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "diskusage": "^1.2.0",
     "electron-context-menu": "^4.0.4",
     "localforage": "^1.10.0",
     "loudness": "^0.4.2",

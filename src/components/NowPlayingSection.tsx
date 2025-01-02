@@ -21,6 +21,7 @@ interface Song {
 }
 
 export default function HorizontalNowPlayingCard() {
+  // @ts-expect-error -- not implemented
   const [currentSong, setCurrentSong] = useState<Song>({
     title: "Starlight",
     artist: "Muse",
