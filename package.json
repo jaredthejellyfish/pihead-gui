@@ -30,7 +30,6 @@
     "@radix-ui/react-slider": "^1.2.2",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-switch": "^1.1.2",
-    "@types/better-sqlite3": "^7.6.12",
     "babel-plugin-react-compiler": "^19.0.0-beta-55955c9-20241229",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -46,7 +45,6 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.1.1",
     "sort-by": "^1.2.0",
-    "sqlite-electron": "^3.1.1",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
     "vite-tsconfig-paths": "^5.1.4"
