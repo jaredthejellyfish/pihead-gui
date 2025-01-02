@@ -13,7 +13,7 @@ jobs:
       matrix:
         os: [macos-latest, ubuntu-latest]
         include:
-          - os: ubuntu-latest
+          - os: arm64-linux
             platform: linux
             arch: arm64
 
@@ -36,7 +36,7 @@ jobs:
 
       # Linux-specific setup for ARM builds
       - name: Install Linux dependencies
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'arm64-linux'
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
@@ -51,7 +51,7 @@ jobs:
 
       # Special build step for Linux ARM
       - name: Build Linux ARM
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.os == 'arm64-linux'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
